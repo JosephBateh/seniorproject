@@ -15,3 +15,6 @@
 
 # Remove ds_store files
 *.DS_Store
+
+# We don't need the node modules
+client/spm/node_modules
