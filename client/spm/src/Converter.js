@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 
 class Converter extends Component {
+    getRequest() {
+        
+    }
+    
     render() {
         return (
           <div className="App">
@@ -13,7 +17,7 @@ class Converter extends Component {
               New Base:
               <input type="text"></input><br />
             </div>
-            <button>Convert</button>
+            <button onClick={this.getRequest}>Convert</button>
           </div>
         );
       }
