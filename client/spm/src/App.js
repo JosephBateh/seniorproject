@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
+import Timer from './Timer'
+import Converter from './Converter'
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <div>
-          Number:
-          <input type="text"></input>
-          Base:
-          <input type="text"></input>
-          New Base:
-          <input type="text"></input>
-        </div>
-        <button>I Dare You</button>
+        <Timer></Timer>
+        <Converter></Converter>
       </div>
     );
   }
