@@ -1,8 +1,17 @@
 import React, {Component} from 'react';
 
 class Converter extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {isClicked: true};
+        this.getRequest = this.getRequest.bind(this);
+    }
+    
     getRequest() {
-        
+        console.log(this.state.isClicked);
+        this.setState(prevState => ({
+            isClicked: !prevState.isClicked
+        }));
     }
     
     render() {
