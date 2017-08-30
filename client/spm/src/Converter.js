@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 class Converter extends Component {
     constructor(props) {
@@ -23,9 +24,18 @@ class Converter extends Component {
       }
 
     convertButtonPressed(event) {
-        console.log("Number:", this.state.number);
-        console.log("Base:", this.state.base);
-        console.log("New Base:", this.state.newBase);
+        axios({
+            method: 'get',
+            baseURL: 'http://localhost:4000/',
+            url: '/converter',
+            // Might need this on the server side somehow
+            headers: {'Access-Control-Allow-Origin': '*'},
+            params: {
+              number: this.state.number,
+              oldBase: this.state.base,
+              newBase: this.state.newBase
+            }
+          });
     }
     
     render() {
