@@ -28,11 +28,6 @@ class Converter extends Component {
             method: 'GET',
             baseURL: 'http://localhost:4000/',
             url: '/numberconverter',
-            // headers: {
-            //     'Access-Control-Allow-Origin': '*',
-            //     'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-            //     'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
-            // },
             params: {
               number: this.state.number,
               oldBase: this.state.base,
