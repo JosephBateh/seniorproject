@@ -21,7 +21,9 @@ func Start() {
 }
 
 func numberconverter(writer http.ResponseWriter, response *http.Request) {
-	writer.Header().Set("Access-Control-Allow-Origin", "true")
+	writer.Header().Set("Access-Control-Allow-Origin", "*")
+	writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
+	writer.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	// Check if the method is a get
 	if response.Method != http.MethodGet {
