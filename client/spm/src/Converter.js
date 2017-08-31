@@ -4,11 +4,7 @@ import axios from 'axios';
 class Converter extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            // number: 0,
-            // base: 10,
-            // newBase: 10
-        };
+        this.state = {};
         this.convertButtonPressed = this.convertButtonPressed.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -25,16 +21,19 @@ class Converter extends Component {
 
     convertButtonPressed(event) {
         axios({
-            method: 'get',
+            method: 'GET',
             baseURL: 'http://localhost:4000/',
-            url: '/converter',
-            // Might need this on the server side somehow
-            headers: {'Access-Control-Allow-Origin': '*'},
+            url: '/numberconverter',
             params: {
               number: this.state.number,
               oldBase: this.state.base,
               newBase: this.state.newBase
             }
+          })
+          .then((response) => {
+            this.setState({
+                result: response.data.Result
+            });
           });
     }
     
@@ -51,6 +50,7 @@ class Converter extends Component {
               <input name="newBase" onChange={this.handleChange} type="text" placeholder="New Base"></input><br />
             </div>
             <button onClick={this.convertButtonPressed}>Convert</button>
+            <p>{this.state.result}</p>
           </div>
         );
       }
