@@ -4,11 +4,7 @@ import axios from 'axios';
 class Converter extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            // number: 0,
-            // base: 10,
-            // newBase: 10
-        };
+        this.state = {};
         this.convertButtonPressed = this.convertButtonPressed.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -33,6 +29,11 @@ class Converter extends Component {
               oldBase: this.state.base,
               newBase: this.state.newBase
             }
+          })
+          .then((response) => {
+            this.setState({
+                result: response.data.Result
+            });
           });
     }
     
@@ -49,6 +50,7 @@ class Converter extends Component {
               <input name="newBase" onChange={this.handleChange} type="text" placeholder="New Base"></input><br />
             </div>
             <button onClick={this.convertButtonPressed}>Convert</button>
+            <p>{this.state.result}</p>
           </div>
         );
       }
