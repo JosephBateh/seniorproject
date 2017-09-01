@@ -39,7 +39,7 @@ class Converter extends Component {
     
     render() {
         return (
-          <div className="App">
+          <div className="Converter">
             <p>Number Converter</p>
             <div>
               Number:
