@@ -8,7 +8,9 @@ class App extends Component {
     return (
       <div className="App">
         <Timer></Timer>
-        <List></List>
+        <span className="spm-module">
+            <List></List>
+        </span>
       </div>
     );
   }
