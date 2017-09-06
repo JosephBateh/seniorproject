@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './List.css';
 import axios from 'axios';
+import ListItem from './ListItem';
 
 class List extends Component {
     constructor(props) {
@@ -30,7 +31,18 @@ class List extends Component {
     render() {
         return (
             <div className="list">
-                 {this.state.results ? this.state.results.map((result, index) => <div key={index}>{result.Title}, {result.Artist}, {result.Album}</div>) : <div>loading...</div>}
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Title</td>
+                            <td>Artist</td>
+                            <td>Album</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.results ? this.state.results.map((result, index) => <ListItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></ListItem>) : <tr><td>loading...</td></tr>}
+                    </tbody>
+                </table>
             </div>
         );
     }

@@ -3,3 +3,7 @@
     overflow-y: scroll;
     overflow: auto;
 }
+
+.list table {
+    background-color: gainsboro;
+}
