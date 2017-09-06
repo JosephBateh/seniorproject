@@ -1,7 +1,7 @@
 package rest
 
 // Example:
-// http://localhost:3000/numberconverter?number=500000&oldBase=10&newBase=16
+// http://localhost:4000/dummydata
 
 import (
 	"encoding/json"
@@ -34,11 +34,20 @@ func dummydata(writer http.ResponseWriter, response *http.Request) {
 		return
 	}
 
-	title := "Call of Duty 4 - Modern Warfare: Main Theme"
-	artist := "Harry Grigson-Williams"
-	album := "The Greatest Video Game Music"
+	title := "Glish"
+	artist := "deadmau5"
+	album := "W:/2016ALBUM/"
 
-	finalResponse := song{title, artist, album}
+	// Declare array of songs
+	finalResponse := [100]song{}
+
+	// First song is different than the other 99
+	finalResponse[0] = song{"Support", "deadmau5", "stuff i used to do"}
+	for i := 1; i < 100; i++ {
+		
+		finalResponse[i] = song{title, artist, album}
+	}
+
 	b, err := json.Marshal(finalResponse)
 	if err != nil {
 		http.Error(writer, http.StatusText(500), 500)
