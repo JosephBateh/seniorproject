@@ -44,7 +44,6 @@ func dummydata(writer http.ResponseWriter, response *http.Request) {
 	// First song is different than the other 99
 	finalResponse[0] = song{"Support", "deadmau5", "stuff i used to do"}
 	for i := 1; i < 100; i++ {
-		
 		finalResponse[i] = song{title, artist, album}
 	}
 
