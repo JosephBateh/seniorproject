@@ -1,0 +1,10 @@
+ul {
+    list-style-type: none;
+}
+
+.sidebar {
+    background-color: lightblue;
+    float: left;
+    width: 20vw;
+    height: 100vh;
+}
