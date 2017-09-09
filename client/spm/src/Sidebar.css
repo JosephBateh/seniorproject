@@ -7,4 +7,6 @@ ul {
     float: left;
     width: 20vw;
     height: 100vh;
+    overflow-y: scroll;
+    overflow: auto;
 }
