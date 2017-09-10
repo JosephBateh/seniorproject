@@ -31,18 +31,9 @@ class List extends Component {
     render() {
         return (
             <div className="list">
-                <table>
-                    <thead>
-                        <tr>
-                            <td>Title</td>
-                            <td>Artist</td>
-                            <td>Album</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.results ? this.state.results.map((result, index) => <ListItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></ListItem>) : <tr><td>loading...</td></tr>}
-                    </tbody>
-                </table>
+                <ul>
+                    {this.state.results ? this.state.results.map((result, index) => <ListItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></ListItem>) : <li></li>}
+                </ul>
             </div>
         );
     }

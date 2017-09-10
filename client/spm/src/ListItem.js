@@ -4,11 +4,11 @@ import './ListItem.css';
 class ListItem extends Component {
     render() {
         return (
-            <tr className="listItem">
-                <td>Song: {this.props.title}</td>
-                <td>Artist: {this.props.artist}</td>
-                <td>Album: {this.props.album}</td>
-            </tr>
+            <li className="listItem">
+                <span>{this.props.title}</span>
+                <span>{this.props.artist}</span>
+                <span>{this.props.album}</span>
+            </li>
         );
     }
 }
