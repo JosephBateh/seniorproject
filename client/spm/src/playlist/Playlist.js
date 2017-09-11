@@ -29,10 +29,12 @@ class Playlist extends Component {
     
     render() {
         return (
-            <div className="playlist">
-                <ul>
-                    {this.state.results ? this.state.results.map((result, index) => <PlaylistItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></PlaylistItem>) : <li>Loading...</li>}
-                </ul>
+            <div className="playlist-wrapper">
+                <div className="playlist">
+                    <ul className="flex-list">
+                        {this.state.results ? this.state.results.map((result, index) => <PlaylistItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></PlaylistItem>) : <li>Loading...</li>}
+                    </ul>
+                </div>
             </div>
         );
     }

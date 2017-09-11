@@ -1,26 +1,14 @@
-li.playlist-item {
-    margin: 5px 0px 5px 0px;
+.playlist-item {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    background-color: white;
 }
 
 .playlist-item-title {
-    flex: 1;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0%;
-    text-align: left;
-    width: 100%;
-    overflow: hidden;
-    margin: 5px 0px 5px 0px;
+    flex-basis: 100%;
 }
 
 .playlist-item-info {
-    flex: 1;
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0%;
-    text-align: left;
-    overflow: hidden;
-    float: left;
-    width: 100%;
-    margin: 5px 0px 5px 0px;
+    flex-basis: 100%;
 }
