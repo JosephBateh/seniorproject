@@ -1,6 +1,26 @@
-.listItem {
+li.list-item {
+    margin: 5px 0px 5px 0px;
+}
+
+.list-item-song {
+    flex: 1;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
     text-align: left;
-    text-overflow: ellipsis;
+    width: 100%;
     overflow: hidden;
-    white-space: nowrap;
+    margin: 5px 0px 5px 0px;
+}
+
+.list-item-info {
+    flex: 1;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
+    text-align: left;
+    overflow: hidden;
+    float: left;
+    width: 100%;
+    margin: 5px 0px 5px 0px;
 }

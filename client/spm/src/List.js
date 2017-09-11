@@ -32,7 +32,7 @@ class List extends Component {
         return (
             <div className="list">
                 <ul>
-                    {this.state.results ? this.state.results.map((result, index) => <ListItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></ListItem>) : <li></li>}
+                    {this.state.results ? this.state.results.map((result, index) => <ListItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></ListItem>) : <li>Loading...</li>}
                 </ul>
             </div>
         );

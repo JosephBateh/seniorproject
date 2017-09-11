@@ -32,9 +32,6 @@ class Sidebar extends Component {
         return (
             <div className="sidebar">
                 <div className="playlists">
-                    <label>
-                        Playlists
-                    </label>
                     <ul>
                         {this.state.results ? this.state.results.map((result, index) => <SidebarItem key={index} title={result.Title} creator={result.Creator} ></SidebarItem>) : <li>loading...</li>}
                     </ul>
