@@ -1,17 +1,23 @@
-ul {
+ul.sidebar-flexlist {
     list-style-type: none;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
     -webkit-padding-start: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-.sidebar {
+.sidebar-wrapper {
     background-color: lightblue;
     float: left;
     width: 20vw;
     height: 100vh;
     overflow-y: scroll;
     overflow: auto;
+}
+
+.sidebar {
+    margin: 10px;
 }

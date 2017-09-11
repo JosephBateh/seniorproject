@@ -29,9 +29,9 @@ class Sidebar extends Component {
     
     render() {
         return (
-            <div className="sidebar">
-                <div className="playlists">
-                    <ul>
+            <div className="sidebar-wrapper">
+                <div className="sidebar">
+                    <ul className="sidebar-flexlist">
                         {this.state.results ? this.state.results.map((result, index) => <SidebarItem key={index} title={result.Title} creator={result.Creator} ></SidebarItem>) : <li>loading...</li>}
                     </ul>
                 </div>
