@@ -1,8 +1,8 @@
-li.list-item {
+li.playlist-item {
     margin: 5px 0px 5px 0px;
 }
 
-.list-item-song {
+.playlist-item-title {
     flex: 1;
     flex-grow: 1;
     flex-shrink: 1;
@@ -13,7 +13,7 @@ li.list-item {
     margin: 5px 0px 5px 0px;
 }
 
-.list-item-info {
+.playlist-item-info {
     flex: 1;
     flex-grow: 1;
     flex-shrink: 1;

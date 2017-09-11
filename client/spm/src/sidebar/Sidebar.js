@@ -21,7 +21,6 @@ class Sidebar extends Component {
             this.setState({
                 results: responseObject
             });
-            console.log(JSON.stringify(response.data))
           })
           .catch(function(err) {
               console.log(err);

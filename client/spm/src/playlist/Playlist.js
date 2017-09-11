@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import './List.css';
+import './Playlist.css';
 import axios from 'axios';
-import ListItem from './ListItem';
+import PlaylistItem from './PlaylistItem';
 
-class List extends Component {
+class Playlist extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -20,8 +20,7 @@ class List extends Component {
             var responseObject = JSON.parse(responseString);
             this.setState({
                 results: responseObject
-            });
-            console.log(JSON.stringify(response.data))
+            });            
           })
           .catch(function(err) {
               console.log(err);
@@ -30,13 +29,13 @@ class List extends Component {
     
     render() {
         return (
-            <div className="list">
+            <div className="playlist">
                 <ul>
-                    {this.state.results ? this.state.results.map((result, index) => <ListItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></ListItem>) : <li>Loading...</li>}
+                    {this.state.results ? this.state.results.map((result, index) => <PlaylistItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></PlaylistItem>) : <li>Loading...</li>}
                 </ul>
             </div>
         );
     }
 }
 
-export default List;
+export default Playlist;
