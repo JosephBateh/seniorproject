@@ -10,9 +10,13 @@ class Sidebar extends Component {
     }
 
     componentDidMount() {
+        var getURL = 'http://localhost:4000/';
+        if (process.env.REACT_APP_ENV === 'production') {
+            getURL = 'http://nano.josephbateh.com:4000';
+        }
         axios({
             method: 'GET',
-            baseURL: 'http://localhost:4000/',
+            baseURL: getURL,
             url: '/playlists'
           })
           .then((response) => {

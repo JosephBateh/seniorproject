@@ -44,7 +44,7 @@ func playlists(writer http.ResponseWriter, response *http.Request) {
 	// Declare array of songs
 	finalResponse := [100]playlist{}
 
-	// First song is different than the other 99
+	// First playlist is different than the other 99
 	for i := 0; i < 100; i++ {
 		name := "Playlist" + strconv.Itoa(i)
 		creator := "Creator" + strconv.Itoa(i)
