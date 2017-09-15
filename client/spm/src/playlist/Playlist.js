@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './Playlist.css';
 import axios from 'axios';
 import PlaylistItem from './PlaylistItem';
+import {List, ListItem} from 'material-ui/List';
 
 class Playlist extends Component {
     constructor(props) {
@@ -35,9 +36,9 @@ class Playlist extends Component {
         return (
             <div className="playlist-wrapper">
                 <div className="playlist">
-                    <ul className="flex-list">
-                        {this.state.results ? this.state.results.map((result, index) => <PlaylistItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></PlaylistItem>) : <li>Loading...</li>}
-                    </ul>
+                    <List className="flex-list">
+                        {this.state.results ? this.state.results.map((result, index) => <PlaylistItem key={index} title={result.Title} artist={result.Artist} album={result.Album}></PlaylistItem>) : <ListItem>Loading...</ListItem>}
+                    </List>
                 </div>
             </div>
         );

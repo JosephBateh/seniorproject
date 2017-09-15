@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './Sidebar.css';
 import SidebarItem from './SidebarItem'
 import axios from 'axios';
+import {List, ListItem} from 'material-ui/List';
 
 class Sidebar extends Component {    
     constructor(props) {
@@ -35,9 +36,9 @@ class Sidebar extends Component {
         return (
             <div className="sidebar-wrapper">
                 <div className="sidebar">
-                    <ul className="sidebar-flexlist">
-                        {this.state.results ? this.state.results.map((result, index) => <SidebarItem key={index} title={result.Title} creator={result.Creator} ></SidebarItem>) : <li>loading...</li>}
-                    </ul>
+                    <List className="sidebar-flexlist">
+                        {this.state.results ? this.state.results.map((result, index) => <SidebarItem key={index} title={result.Title} creator={result.Creator} ></SidebarItem>) : <ListItem>loading...</ListItem>}
+                    </List>
                 </div>
             </div>
         );

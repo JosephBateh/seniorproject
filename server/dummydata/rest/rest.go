@@ -42,10 +42,9 @@ func playlists(writer http.ResponseWriter, response *http.Request) {
 	}
 
 	// Declare array of songs
-	finalResponse := [100]playlist{}
+	finalResponse := [15]playlist{}
 
-	// First playlist is different than the other 99
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 15; i++ {
 		name := "Playlist" + strconv.Itoa(i)
 		creator := "Creator" + strconv.Itoa(i)
 		finalResponse[i] = playlist{name, creator}
@@ -75,11 +74,11 @@ func dummydata(writer http.ResponseWriter, response *http.Request) {
 	album := "W:/2016ALBUM/"
 
 	// Declare array of songs
-	finalResponse := [100]song{}
+	finalResponse := [20]song{}
 
-	// First song is different than the other 99
+	// First song is different than the other 19
 	finalResponse[0] = song{"Support", "deadmau5", "stuff i used to do"}
-	for i := 1; i < 100; i++ {
+	for i := 1; i < 20; i++ {
 		finalResponse[i] = song{title, artist, album}
 	}
 
