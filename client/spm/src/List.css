@@ -1,9 +1,0 @@
-.list {
-    height: 50vh;
-    overflow-y: scroll;
-    overflow: auto;
-}
-
-.list table {
-    background-color: gainsboro;
-}
