@@ -18,7 +18,7 @@ class Playlist extends Component {
         axios({
             method: 'GET',
             baseURL: getURL,
-            url: '/dummydata'
+            url: '/playlists/0000'
           })
           .then((response) => {
             var responseString = JSON.stringify(response.data);
