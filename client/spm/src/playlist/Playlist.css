@@ -1,5 +1,8 @@
-.playlist-wrapper {
+div.main-content-wrapper {
     height: 100vh;
-    overflow-y: scroll;
-    overflow: auto;
+    overflow: scroll;
+}
+
+div.main-content {
+    margin-left: 256px;
 }
