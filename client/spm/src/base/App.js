@@ -56,8 +56,8 @@ class App extends Component {
         this.getRequest(domain, url, method, 'currentPlaylistSongs');
     }
     
-    handlePlaylistChange(playlist) {
-        this.setState({currentPlaylist: playlist});
+    handlePlaylistChange(value) {
+        this.setState({currentPlaylist: value});
     }
 
     componentDidMount() {
@@ -66,8 +66,17 @@ class App extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        console.log(nextState.currentPlaylistSongs);
-        return true;
+        if (nextState !== this.state) {
+            return true;
+        }
+        return false;
+    }
+
+    componentDidUpdate(nextProps, nextState) {
+        if (nextState.currentPlaylist !== this.state.currentPlaylist) {
+            //this.getUserPlaylists();
+            this.getPlaylistSongs(this.state.currentPlaylist);
+        }
     }
 
     render() {
@@ -78,16 +87,14 @@ class App extends Component {
         return ( 
             <MuiThemeProvider>
                 <div className="App">
-                    <span className="spm-module">
-                        <Sidebar
-                            currentPlaylist={currentPlaylist}
-                            userPlaylists={userPlaylists}
-                            onCurrentPlaylistChange={this.handlePlaylistChange}/>
-                        <List
-                            currentPlaylist={currentPlaylist}
-                            currentPlaylistSongs={currentPlaylistSongs}
-                            onCurrentPlaylistChange={this.handlePlaylistChange}/>
-                    </span>
+                    <Sidebar
+                        currentPlaylist={currentPlaylist}
+                        userPlaylists={userPlaylists}
+                        onCurrentPlaylistChange={this.handlePlaylistChange}/>
+                    <List
+                        currentPlaylist={currentPlaylist}
+                        currentPlaylistSongs={currentPlaylistSongs}
+                        onCurrentPlaylistChange={this.handlePlaylistChange}/>
                 </div>
             </MuiThemeProvider>
         );
