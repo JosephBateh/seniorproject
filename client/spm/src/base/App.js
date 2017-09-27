@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import List from '../playlist/Playlist';
 import Sidebar from '../sidebar/Sidebar';
+import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class App extends Component {
@@ -17,6 +18,7 @@ class App extends Component {
         this.getRequest = this.getRequest.bind(this);
         this.getUserPlaylists = this.getUserPlaylists.bind(this);
         this.getPlaylistSongs = this.getPlaylistSongs.bind(this);
+        this.login = this.login.bind(this);
     }
 
     // domain: 'http://example.com'
@@ -79,6 +81,30 @@ class App extends Component {
         }
     }
 
+    login() {
+        console.log("Logging in to Spotify.");
+        var domain = 'https://accounts.spotify.com';
+        var url = '/authorize';
+        var method = 'GET';
+
+        axios({
+            method: method,
+            baseURL: domain,
+            url: url,
+            params: {
+                client_id: "d34404005f6c45359f360c9e1dd4bac6",
+                responseType: "code"
+            }
+          })
+          .then((response) => {
+            var responseString = JSON.stringify(response.data);
+            this.setState({auth: JSON.parse(responseString)});
+          })
+          .catch(function(err) {
+              console.log(err);
+          });
+    }
+
     render() {
         const userPlaylists = this.state.userPlaylists;
         const currentPlaylist = this.state.currentPlaylist;
@@ -87,6 +113,7 @@ class App extends Component {
         return ( 
             <MuiThemeProvider>
                 <div className="App">
+                    <RaisedButton onClick={this.login} label="Full width" fullWidth={true} />
                     <Sidebar
                         currentPlaylist={currentPlaylist}
                         userPlaylists={userPlaylists}
