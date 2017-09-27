@@ -10,8 +10,13 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentPlaylist: '0000',
-            currentPlaylistSongs: null
+            currentPlaylist: '0YOscBKxkkbv8b3VZNcQ1x',
+            currentPlaylistSongs: null,
+            userID: '1268025728',
+            userToken: 'USER_TOKEN',
+            spotifyPlaylists: null,
+            spotifyCurrentPlaylist: null,
+            spotifyPlaylistSongs: null
         };
         
         this.handlePlaylistChange = this.handlePlaylistChange.bind(this);
@@ -19,6 +24,8 @@ class App extends Component {
         this.getUserPlaylists = this.getUserPlaylists.bind(this);
         this.getPlaylistSongs = this.getPlaylistSongs.bind(this);
         this.login = this.login.bind(this);
+        this.getSpotifyPlaylists = this.getSpotifyPlaylists.bind(this);
+        this.getSpotifyPlaylistSongs = this.getSpotifyPlaylistSongs.bind(this);
     }
 
     // domain: 'http://example.com'
@@ -44,6 +51,61 @@ class App extends Component {
           });
     }
 
+    getSpotifyPlaylists() {
+        axios({
+            method: "GET",
+            baseURL: "https://api.spotify.com",
+            url: "/v1/users/" + this.state.userID + "/playlists",
+            headers: {'Authorization': 'Bearer ' + this.state.userToken},
+          })
+          .then((response) => {
+            var responseString = JSON.stringify(response.data);
+            var playlists = JSON.parse(responseString).items;
+            var objects = [];
+            
+            for (var key in playlists) {
+                objects.push({
+                    Creator: "Joseph Bateh",
+                    Title: playlists[key].name,
+                    UUID: playlists[key].id
+                });
+            }
+
+            this.setState({spotifyPlaylists: objects});
+          })
+          .catch(function(err) {
+              console.log(err);
+          });
+    }
+
+    getSpotifyPlaylistSongs() {
+        axios({
+            method: "GET",
+            baseURL: "https://api.spotify.com",
+            url: "/v1/users/" + this.state.userID + "/playlists/" + this.state.currentPlaylist + "/tracks",
+            headers: {'Authorization': 'Bearer ' + this.state.userToken},
+          })
+          .then((response) => {
+            var responseString = JSON.stringify(response.data);
+
+            var songs = JSON.parse(responseString).items;
+            var objects = [];
+            
+            for (var key in songs) {
+                objects.push({
+                    Title: songs[key].track.name,
+                    Artist: songs[key].track.artists.name,
+                    Album: songs[key].track.album.name
+                });
+            }
+
+            this.setState({spotifyPlaylistSongs: objects});
+          })
+          .catch(function(err) {
+              console.log(err);
+          });
+    }
+
     getUserPlaylists() {
         var domain = 'http://dev.josephbateh.com:4000';
         var url = '/playlists';
@@ -63,8 +125,10 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.getUserPlaylists();
-        this.getPlaylistSongs(this.state.currentPlaylist);
+        //this.getUserPlaylists();
+        this.getSpotifyPlaylists();
+        //this.getPlaylistSongs(this.state.currentPlaylist);
+        this.getSpotifyPlaylistSongs();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -77,7 +141,8 @@ class App extends Component {
     componentDidUpdate(nextProps, nextState) {
         if (nextState.currentPlaylist !== this.state.currentPlaylist) {
             //this.getUserPlaylists();
-            this.getPlaylistSongs(this.state.currentPlaylist);
+            //this.getPlaylistSongs(this.state.currentPlaylist);
+            this.getSpotifyPlaylistSongs();
         }
     }
 
@@ -106,9 +171,9 @@ class App extends Component {
     }
 
     render() {
-        const userPlaylists = this.state.userPlaylists;
-        const currentPlaylist = this.state.currentPlaylist;
-        const currentPlaylistSongs = this.state.currentPlaylistSongs;
+        const userPlaylists = this.state.spotifyPlaylists;
+        const currentPlaylist = this.state.spotifyCurrentPlaylist;
+        const currentPlaylistSongs = this.state.spotifyPlaylistSongs;
         
         return ( 
             <MuiThemeProvider>
