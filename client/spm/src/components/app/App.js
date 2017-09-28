@@ -3,7 +3,6 @@ import './App.css';
 import axios from 'axios';
 import List from '../playlist/Playlist';
 import Sidebar from '../sidebar/Sidebar';
-import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class App extends Component {
@@ -178,7 +177,6 @@ class App extends Component {
         return ( 
             <MuiThemeProvider>
                 <div className="App">
-                    <RaisedButton onClick={this.login} label="Full width" fullWidth={true} />
                     <Sidebar
                         currentPlaylist={currentPlaylist}
                         userPlaylists={userPlaylists}
