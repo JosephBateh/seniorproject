@@ -17,10 +17,10 @@ class Root extends Component {
             <MuiThemeProvider>
                 <Router>
                     <Switch>
-                        <Route exact path="/" component={App}>
+                        <Route exact path="/" component={Login}>
 
                         </Route>
-                        <Route path="/login" component={Login}>
+                        <Route path="/callback" component={App}>
                             
                         </Route>
                     </Switch>

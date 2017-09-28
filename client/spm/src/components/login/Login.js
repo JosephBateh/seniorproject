@@ -1,32 +1,61 @@
 import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-const redirect_uri = 'http://localhost:3000';
+const redirectURI = 'http://localhost:3000/callback/';
+const clientID = 'd34404005f6c45359f360c9e1dd4bac6';
 
 class Login extends Component {
     constructor(props) {
         super(props);
 
-        this.getToken = this.getToken.bind(this);
-        //this.authorize = this.authorize.bind(this);
+        //this.getToken = this.getToken.bind(this);
+        this.authorize = this.authorize.bind(this);
         //this.login = this.login.bind(this);
     }
 
-    getToken() {
-        fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
+    // Implicit Grant Flow Authorization
+    authorize() {
+        var url = 'https://accounts.spotify.com/authorize';
+        url += '?response_type=token';
+        url += '&client_id=' + encodeURIComponent(clientID);
+        url += '&redirect_uri=' + encodeURIComponent(redirectURI);
+        //window.location = url; 
+        
+        fetch('/authorize', {
+            method: 'GET',
         })
-        .then(res => res.json())
-        .then(({code}) => {
-            window.location = `https://getpocket.com/auth/authorize?request_token=${code}&redirect_uri=${redirect_uri}`;
-            window.location = 'GET https://accounts.spotify.com/authorize/?client_id=5fe01282e44241328a84e7c5cc169165&response_type=code&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=user-read-private%20user-read-email&state=34fFs29kd09';
+        .then( () => {
+            window.location = url;
+        })
+        .catch(e => {
+            console.log(e);
         });
+
+        // axios({
+        //     method: 'GET',
+        //     baseURL: 'https://accounts.spotify.com',
+        //     url: '/authorize',
+        //     params: {
+        //         response_type: 'token',
+        //         client_id: encodeURIComponent(clientID),
+        //         redirect_uri: encodeURIComponent(redirectURI)
+        //     }
+        //   })
+        //   .then( res => res.JSON.stringify(res))
+        //   .then( token => {
+        //     console.log("testing");
+        //     localStorage.setItem('authToken', token);
+        //     window.location = url;
+        //   })
+        //   .catch(function(err) {
+        //       console.log(err);
+        //   });
     }
 
     render() {
         return (
             <div>
-                <RaisedButton label="Login to Spotify" fullWidth={true} onClick={this.login} />
+                <RaisedButton label="Login to Spotify" fullWidth={true} onClick={this.authorize} />
             </div>
         );
     }

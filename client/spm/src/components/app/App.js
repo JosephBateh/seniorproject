@@ -8,45 +8,16 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentPlaylist: '0YOscBKxkkbv8b3VZNcQ1x',
+            currentPlaylist: null,
             currentPlaylistSongs: null,
             userID: '1268025728',
-            userToken: 'BQDwWbdITUjzpUePAKVQhyI-tJnUjQ0AaYUS0KGtVhklG8EJ6p0FxNdPSGHqyOHrSJ1lDPNlKkdRrr9_dwESkmXT2PWzDtgoAN0gc116KdUCnejdTJw64ExsHNdH70ra9G1CepmumBTK76kemfKfADwQS77DyvOpt6g&refresh_token=AQC77FODqksiuOAbLlCALczmFb5lkF_UolXgpjA6g3nuTh02oPLlVMxkAsCI0ciMtzYzmu2fduT_dPVjAzRhvOrW7y9F6n27itIPPTTa6LaLAay1LPFkCccwQsY2Mu4sdpw',
-            spotifyPlaylists: null,
-            spotifyCurrentPlaylist: null,
-            spotifyPlaylistSongs: null
+            userToken: null,
+            spotifyPlaylists: null
         };
         
         this.handlePlaylistChange = this.handlePlaylistChange.bind(this);
-        this.getRequest = this.getRequest.bind(this);
-        this.getUserPlaylists = this.getUserPlaylists.bind(this);
-        this.getPlaylistSongs = this.getPlaylistSongs.bind(this);
-        this.login = this.login.bind(this);
         this.getSpotifyPlaylists = this.getSpotifyPlaylists.bind(this);
         this.getSpotifyPlaylistSongs = this.getSpotifyPlaylistSongs.bind(this);
-    }
-
-    // domain: 'http://example.com'
-    // url: '/playlists/guid'
-    // method: 'GET'
-    getRequest(domain, url, method, stateVar) {
-        var baseURL = 'http://localhost:4000/';
-        if (process.env.REACT_APP_ENV === 'production') {
-            baseURL = domain;
-        }
-
-        axios({
-            method: method,
-            baseURL: baseURL,
-            url: url
-          })
-          .then((response) => {
-            var responseString = JSON.stringify(response.data);
-            this.setState({[stateVar]: JSON.parse(responseString)});
-          })
-          .catch(function(err) {
-              console.log(err);
-          });
     }
 
     getSpotifyPlaylists() {
@@ -57,8 +28,7 @@ class App extends Component {
             headers: {'Authorization': 'Bearer ' + this.state.userToken},
           })
           .then((response) => {
-            var responseString = JSON.stringify(response.data);
-            var playlists = JSON.parse(responseString).items;
+            var playlists = response.data.items;
             var objects = [];
             
             for (var key in playlists) {
@@ -69,7 +39,10 @@ class App extends Component {
                 });
             }
 
-            this.setState({spotifyPlaylists: objects});
+            this.setState({
+                spotifyPlaylists: objects,
+                currentPlaylist: objects[0].UUID
+            });
           })
           .catch(function(err) {
               console.log(err);
@@ -84,38 +57,21 @@ class App extends Component {
             headers: {'Authorization': 'Bearer ' + this.state.userToken},
           })
           .then((response) => {
-            var responseString = JSON.stringify(response.data);
+            const currentPlaylistSongs = response.data.items.map( song => {
+              return {
+                Title: song.track.name,
+                Artist: song.track.artists.name,
+                Album: song.track.album.name
+              };
+            });
 
-            var songs = JSON.parse(responseString).items;
-            var objects = [];
-            
-            for (var key in songs) {
-                objects.push({
-                    Title: songs[key].track.name,
-                    Artist: songs[key].track.artists.name,
-                    Album: songs[key].track.album.name
-                });
-            }
-
-            this.setState({spotifyPlaylistSongs: objects});
+            this.setState({
+                currentPlaylistSongs
+            });
           })
           .catch(function(err) {
               console.log(err);
           });
-    }
-
-    getUserPlaylists() {
-        var domain = 'http://dev.josephbateh.com:4000';
-        var url = '/playlists';
-        var method = 'GET';
-        this.getRequest(domain, url, method, 'userPlaylists');
-    }
-
-    getPlaylistSongs(playlist) {
-        var domain = 'http://dev.josephbateh.com:4000';
-        var url = '/playlists/' + playlist;
-        var method = 'GET';
-        this.getRequest(domain, url, method, 'currentPlaylistSongs');
     }
     
     handlePlaylistChange(value) {
@@ -123,10 +79,15 @@ class App extends Component {
     }
 
     componentDidMount() {
-        //this.getUserPlaylists();
         this.getSpotifyPlaylists();
-        //this.getPlaylistSongs(this.state.currentPlaylist);
-        this.getSpotifyPlaylistSongs();
+    }
+
+    componentWillMount() {
+        // This is dirty, I know
+        var token = this.props.location.hash.split('=')[1].split('&')[0];
+        this.setState({
+            userToken: token
+        });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -138,39 +99,14 @@ class App extends Component {
 
     componentDidUpdate(nextProps, nextState) {
         if (nextState.currentPlaylist !== this.state.currentPlaylist) {
-            //this.getUserPlaylists();
-            //this.getPlaylistSongs(this.state.currentPlaylist);
             this.getSpotifyPlaylistSongs();
         }
     }
 
-    login() {
-        var domain = 'https://accounts.spotify.com';
-        var url = '/authorize';
-        var method = 'GET';
-
-        axios({
-            method: method,
-            baseURL: domain,
-            url: url,
-            params: {
-                client_id: "d34404005f6c45359f360c9e1dd4bac6",
-                responseType: "code"
-            }
-          })
-          .then((response) => {
-            var responseString = JSON.stringify(response.data);
-            this.setState({auth: JSON.parse(responseString)});
-          })
-          .catch(function(err) {
-              console.log(err);
-          });
-    }
-
     render() {
         const userPlaylists = this.state.spotifyPlaylists;
-        const currentPlaylist = this.state.spotifyCurrentPlaylist;
-        const currentPlaylistSongs = this.state.spotifyPlaylistSongs;
+        const currentPlaylist = this.state.currentPlaylist;
+        const currentPlaylistSongs = this.state.currentPlaylistSongs;
         
         return ( 
             <div className="App">
