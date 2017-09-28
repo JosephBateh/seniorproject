@@ -3,7 +3,6 @@ import './App.css';
 import axios from 'axios';
 import List from '../playlist/Playlist';
 import Sidebar from '../sidebar/Sidebar';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class App extends Component {
     constructor(props) {
@@ -12,7 +11,7 @@ class App extends Component {
             currentPlaylist: '0YOscBKxkkbv8b3VZNcQ1x',
             currentPlaylistSongs: null,
             userID: '1268025728',
-            userToken: 'USER_TOKEN',
+            userToken: 'BQDwWbdITUjzpUePAKVQhyI-tJnUjQ0AaYUS0KGtVhklG8EJ6p0FxNdPSGHqyOHrSJ1lDPNlKkdRrr9_dwESkmXT2PWzDtgoAN0gc116KdUCnejdTJw64ExsHNdH70ra9G1CepmumBTK76kemfKfADwQS77DyvOpt6g&refresh_token=AQC77FODqksiuOAbLlCALczmFb5lkF_UolXgpjA6g3nuTh02oPLlVMxkAsCI0ciMtzYzmu2fduT_dPVjAzRhvOrW7y9F6n27itIPPTTa6LaLAay1LPFkCccwQsY2Mu4sdpw',
             spotifyPlaylists: null,
             spotifyCurrentPlaylist: null,
             spotifyPlaylistSongs: null
@@ -146,7 +145,6 @@ class App extends Component {
     }
 
     login() {
-        console.log("Logging in to Spotify.");
         var domain = 'https://accounts.spotify.com';
         var url = '/authorize';
         var method = 'GET';
@@ -175,18 +173,16 @@ class App extends Component {
         const currentPlaylistSongs = this.state.spotifyPlaylistSongs;
         
         return ( 
-            <MuiThemeProvider>
-                <div className="App">
-                    <Sidebar
-                        currentPlaylist={currentPlaylist}
-                        userPlaylists={userPlaylists}
-                        onCurrentPlaylistChange={this.handlePlaylistChange}/>
-                    <List
-                        currentPlaylist={currentPlaylist}
-                        currentPlaylistSongs={currentPlaylistSongs}
-                        onCurrentPlaylistChange={this.handlePlaylistChange}/>
-                </div>
-            </MuiThemeProvider>
+            <div className="App">
+                <Sidebar
+                    currentPlaylist={currentPlaylist}
+                    userPlaylists={userPlaylists}
+                    onCurrentPlaylistChange={this.handlePlaylistChange}/>
+                <List
+                    currentPlaylist={currentPlaylist}
+                    currentPlaylistSongs={currentPlaylistSongs}
+                    onCurrentPlaylistChange={this.handlePlaylistChange}/>
+            </div>
         );
     }
 }
