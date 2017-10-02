@@ -15,7 +15,7 @@ class Login extends Component {
         var redirectURI = 'http://localhost:3000/callback/';
 
         if (process.env.REACT_APP_ENV === 'production') {
-            redirectURI = 'http://dev.josephbateh.com/callback/';
+            redirectURI = 'http://dev.josephbateh.com:5000/callback/';
         }
 
         var url = 'https://accounts.spotify.com/authorize';
