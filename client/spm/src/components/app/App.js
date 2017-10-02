@@ -10,14 +10,32 @@ class App extends Component {
         this.state = {
             currentPlaylist: null,
             currentPlaylistSongs: null,
-            userID: '1268025728',
+            userID: null,
             userToken: null,
             spotifyPlaylists: null
         };
         
         this.handlePlaylistChange = this.handlePlaylistChange.bind(this);
+        this.getSpotifyUser = this.getSpotifyUser.bind(this);
         this.getSpotifyPlaylists = this.getSpotifyPlaylists.bind(this);
         this.getSpotifyPlaylistSongs = this.getSpotifyPlaylistSongs.bind(this);
+    }
+
+    getSpotifyUser() {
+        axios({
+            method: "GET",
+            baseURL: "https://api.spotify.com",
+            url: "/v1/me",
+            headers: {'Authorization': 'Bearer ' + this.state.userToken},
+          })
+          .then((response) => {
+            this.setState({
+                userID: response.data.id
+            });
+          })
+          .catch(function(err) {
+              console.log(err);
+          });
     }
 
     getSpotifyPlaylists() {
@@ -58,11 +76,11 @@ class App extends Component {
           })
           .then((response) => {
             const currentPlaylistSongs = response.data.items.map( song => {
-              return {
-                Title: song.track.name,
-                Artist: song.track.artists.name,
-                Album: song.track.album.name
-              };
+                return {
+                    Title: song.track.name,
+                    Artist: song.track.artists[0].name,
+                    Album: song.track.album.name
+                };
             });
 
             this.setState({
@@ -79,7 +97,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.getSpotifyPlaylists();
+        this.getSpotifyUser();
     }
 
     componentWillMount() {
@@ -98,7 +116,9 @@ class App extends Component {
     }
 
     componentDidUpdate(nextProps, nextState) {
-        if (nextState.currentPlaylist !== this.state.currentPlaylist) {
+        if (nextState.userID !== this.state.userID) {
+            this.getSpotifyPlaylists();
+        } else if (nextState.currentPlaylist !== this.state.currentPlaylist) {
             this.getSpotifyPlaylistSongs();
         }
     }

@@ -9,7 +9,7 @@ class Playlist extends Component {
         return (
             <div className={"main-content-wrapper"}>
                 <List className="main-content">
-                    {songs ? songs.map((list, index) => <PlaylistItem key={index} title={list.Title} artist={list.Artist} album=    {list.Album}></PlaylistItem>) : <ListItem>Loading...</ListItem>}
+                    {songs ? songs.map((list, index) => <PlaylistItem key={index} title={list.Title} artist={list.Artist} album={list.Album}></PlaylistItem>) : <ListItem>Loading...</ListItem>}
                 </List>
             </div>
         );
