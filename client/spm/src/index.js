@@ -1,8 +1,35 @@
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './base/App';
+import App from './components/app/App';
+import Login from './components/login/Login';
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch
+  } from 'react-router-dom'
 import registerServiceWorker from './registerServiceWorker';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+class Root extends Component {
+    render() {
+        return (
+            <MuiThemeProvider>
+                <Router>
+                    <Switch>
+                        <Route exact path="/" component={Login}>
+
+                        </Route>
+                        <Route path="/callback" component={App}>
+                            
+                        </Route>
+                    </Switch>
+                </Router>
+            </MuiThemeProvider>
+        );
+    }
+}
+
+const rootElement = document.getElementById('root');
+ReactDOM.render(<Root />, rootElement);
 registerServiceWorker();
