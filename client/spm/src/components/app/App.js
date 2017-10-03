@@ -124,6 +124,9 @@ class App extends Component {
           .catch(function(err) {
               console.log(err);
           });
+
+        //var currentState = this.state.currentPlaylistSongs;
+        // Delete from view
     }
     
     handlePlaylistChange(value) {

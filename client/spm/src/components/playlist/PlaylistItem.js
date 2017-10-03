@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './PlaylistItem.css';
 import {ListItem} from 'material-ui/List';
+import FlatButton from 'material-ui/FlatButton';
 
 class PlaylistItem extends Component {
     constructor(props) {
@@ -19,7 +20,7 @@ class PlaylistItem extends Component {
                 className="playlist-item" 
                 primaryText={<p className="playlist-item-title">{this.props.title}</p>}
                 secondaryText={<p className="playlist-item-info">{this.props.artist} - {this.props.album}</p>}
-                onClick={this.onClick}>           
+                rightIcon={<FlatButton label="Delete" onClick={this.onClick} />}>
             </ListItem>
         );
     }
