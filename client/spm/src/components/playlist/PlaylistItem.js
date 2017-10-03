@@ -9,7 +9,8 @@ class PlaylistItem extends Component {
     }
 
     onClick() {
-        //console.log("something");
+        console.log("PlaylistItem clicked: " + this.props.id);
+        this.props.onClick(this.props.id);
     }
     
     render() {

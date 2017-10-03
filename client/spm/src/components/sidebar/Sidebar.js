@@ -11,7 +11,7 @@ class Sidebar extends Component {
     }
 
     onClick(value) {
-        this.props.onCurrentPlaylistChange(value);
+        this.props.onClick(value);
     }
     
     render() {
