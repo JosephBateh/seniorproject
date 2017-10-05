@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './PlaylistItem.css';
 import {ListItem} from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton';
 
