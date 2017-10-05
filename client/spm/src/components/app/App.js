@@ -16,9 +16,11 @@ class App extends Component {
         };
         
         this.handlePlaylistChange = this.handlePlaylistChange.bind(this);
+        this.playlistItemClicked = this.playlistItemClicked.bind(this);
         this.getSpotifyUser = this.getSpotifyUser.bind(this);
         this.getSpotifyPlaylists = this.getSpotifyPlaylists.bind(this);
         this.getSpotifyPlaylistSongs = this.getSpotifyPlaylistSongs.bind(this);
+        this.deleteSongsFromPlaylist = this.deleteSongsFromPlaylist.bind(this);
     }
 
     getSpotifyUser() {
@@ -77,6 +79,7 @@ class App extends Component {
           .then((response) => {
             const currentPlaylistSongs = response.data.items.map( song => {
                 return {
+                    ID: song.track.id,
                     Title: song.track.name,
                     Artist: song.track.artists[0].name,
                     Album: song.track.album.name
@@ -91,9 +94,48 @@ class App extends Component {
               console.log(err);
           });
     }
+
+    deleteSongsFromPlaylist(toBeDeleted) {
+        // const tracksList = toBeDeleted.map( track => {
+        //     return {
+        //         "uri": "spotify:track:" + track.id
+        //     };
+        // });
+
+        const tracks = {
+            // "tracks": [
+            //     tracksList
+            // ]
+            "tracks": [
+                { "uri": "spotify:track:" + toBeDeleted }
+            ]
+        }
+
+        axios({
+            method: "DELETE",
+            baseURL: "https://api.spotify.com",
+            url: "/v1/users/" + this.state.userID + "/playlists/" + this.state.currentPlaylist + "/tracks",
+            headers: {'Authorization': 'Bearer ' + this.state.userToken},
+            data: tracks
+          })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch(function(err) {
+              console.log(err);
+          });
+
+        //var currentState = this.state.currentPlaylistSongs;
+        // Delete from view
+    }
     
     handlePlaylistChange(value) {
         this.setState({currentPlaylist: value});
+    }
+
+    playlistItemClicked(value) {
+        console.log("PlaylistItemClicked: " + value);
+        this.deleteSongsFromPlaylist(value);
     }
 
     componentDidMount() {
@@ -133,11 +175,11 @@ class App extends Component {
                 <Sidebar
                     currentPlaylist={currentPlaylist}
                     userPlaylists={userPlaylists}
-                    onCurrentPlaylistChange={this.handlePlaylistChange}/>
+                    onClick={this.handlePlaylistChange}/>
                 <List
                     currentPlaylist={currentPlaylist}
                     currentPlaylistSongs={currentPlaylistSongs}
-                    onCurrentPlaylistChange={this.handlePlaylistChange}/>
+                    onClick={this.playlistItemClicked}/>
             </div>
         );
     }

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './SidebarItem.css'
 import {ListItem} from 'material-ui/List';
 
 class SidebarItem extends Component {    

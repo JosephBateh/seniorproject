@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-const clientID = 'd34404005f6c45359f360c9e1dd4bac6';
-
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -14,14 +12,23 @@ class Login extends Component {
     authorize() {
         var redirectURI = 'http://localhost:3000/callback/';
 
-        if (process.env.REACT_APP_ENV === 'production') {
-            redirectURI = 'http://dev.josephbateh.com:5000/callback/';
+        if (process.env.NODE_ENV === 'production') {
+            redirectURI = process.env.REACT_APP_REDIRECT_URI;
         }
+
+        var apiScope = 'playlist-read-private';
+        apiScope += ' playlist-modify-public';
+        apiScope += ' playlist-modify-private';
+        apiScope += ' user-library-read';
+        apiScope += ' user-library-modify';
+        apiScope += ' user-read-currently-playing';
+        apiScope += ' user-read-recently-played';
 
         var url = 'https://accounts.spotify.com/authorize';
         url += '?response_type=token';
-        url += '&client_id=' + encodeURIComponent(clientID);
+        url += '&client_id=' + encodeURIComponent(process.env.REACT_APP_CLIENT_ID);
         url += '&redirect_uri=' + encodeURIComponent(redirectURI);
+        url += '&scope=' + apiScope;
         
         fetch('/authorize', {
             method: 'GET',

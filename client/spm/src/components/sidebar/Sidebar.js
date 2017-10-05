@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './Sidebar.css';
 import SidebarItem from './SidebarItem'
 import Drawer from 'material-ui/Drawer';
 import {List, ListItem} from 'material-ui/List';
@@ -11,7 +10,7 @@ class Sidebar extends Component {
     }
 
     onClick(value) {
-        this.props.onCurrentPlaylistChange(value);
+        this.props.onClick(value);
     }
     
     render() {
