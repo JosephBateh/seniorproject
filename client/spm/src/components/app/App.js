@@ -175,11 +175,13 @@ class App extends Component {
                 <Sidebar
                     currentPlaylist={currentPlaylist}
                     userPlaylists={userPlaylists}
-                    onClick={this.handlePlaylistChange}/>
+                    onClick={this.handlePlaylistChange}
+                    />
                 <List
                     currentPlaylist={currentPlaylist}
                     currentPlaylistSongs={currentPlaylistSongs}
-                    onClick={this.playlistItemClicked}/>
+                    onClick={this.playlistItemClicked}
+                    />
             </div>
         );
     }
