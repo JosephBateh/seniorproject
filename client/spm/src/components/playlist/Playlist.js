@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './Playlist.css';
 import Searchbar from '../searchbar/Searchbar';
 import ItemList from '../itemlist/ItemList';
+import * as API from '../../helpers/API.js';
 
 class Playlist extends Component {
     constructor(props) {
@@ -22,7 +23,8 @@ class Playlist extends Component {
     searchButtonClicked(text) {
         var items = this.props.currentPlaylistItems;
         sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(items));
-        window.location = 'http://localhost:3000/search/';
+        //window.location = 'http://localhost:3000/search/';
+        API.searchSpotify();
     }
     
     render() {

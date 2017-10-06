@@ -4,7 +4,6 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import PlaylistItem from '../playlist/PlaylistItem';
-import Sidebar from '../sidebar/Sidebar';
 
 class Search extends Component {
     render() {

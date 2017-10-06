@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import axios from 'axios';
-import List from '../playlist/Playlist';
+import Playlist from '../playlist/Playlist';
 import Sidebar from '../sidebar/Sidebar';
 
 class App extends Component {
@@ -177,7 +177,7 @@ class App extends Component {
                     playlists={userPlaylists}
                     onClick={this.handlePlaylistChange}
                 />
-                <List
+                <Playlist
                     currentPlaylist={currentPlaylist}
                     currentPlaylistItems={currentPlaylistItems}
                     onClick={this.playlistItemClicked}
