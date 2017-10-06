@@ -24,7 +24,10 @@ class Playlist extends Component {
         var items = this.props.currentPlaylistItems;
         sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(items));
         //window.location = 'http://localhost:3000/search/';
-        API.searchSpotify();
+        API.searchSpotify(text).then((data) => {
+                console.log(data)
+            }
+        );
     }
     
     render() {

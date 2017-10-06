@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import Playlist from '../playlist/Playlist';
 import Sidebar from '../sidebar/Sidebar';
+import * as API from '../../helpers/API.js';
 
 class App extends Component {
     constructor(props) {
@@ -148,6 +149,7 @@ class App extends Component {
         this.setState({
             userToken: token
         });
+        API.storeToken(token);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
