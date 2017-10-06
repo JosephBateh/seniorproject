@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/app/App';
 import Login from './components/login/Login';
+import Search from './components/search/Search';
 import {
     BrowserRouter as Router,
     Route,
@@ -22,6 +23,9 @@ class Root extends Component {
                         </Route>
                         <Route path="/callback" component={App}>
                             
+                        </Route>
+                        <Route path="/search" component={Search}>
+                        
                         </Route>
                     </Switch>
                 </Router>

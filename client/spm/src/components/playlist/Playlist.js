@@ -10,11 +10,23 @@ class Playlist extends Component {
     constructor(props) {
         super(props);
         this.onClick = this.onClick.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.goToSearch = this.goToSearch.bind(this);
     }
 
     onClick(value) {
         console.log("Playlist clicked: " + value);
         this.props.onClick(value);
+    }
+
+    onChange(e, value) {
+        sessionStorage.setItem('searchBarText', JSON.stringify(value));
+    }
+
+    goToSearch() {
+        var songs = this.props.currentPlaylistSongs;
+        sessionStorage.setItem('songs', JSON.stringify(songs));
+        window.location = 'http://localhost:3000/search/';
     }
     
     render() {
@@ -23,8 +35,8 @@ class Playlist extends Component {
             <div className="main-content">
                 <Toolbar>
                     <ToolbarGroup>
-                        <TextField hintText="Search Spotify..."></TextField>
-                        <FlatButton label="Go"></FlatButton>
+                        <TextField hintText="Search Spotify..." onChange={this.onChange}></TextField>
+                        <FlatButton label="Go" onClick={this.goToSearch}></FlatButton>
                     </ToolbarGroup>
                 </Toolbar>
                 <List>
