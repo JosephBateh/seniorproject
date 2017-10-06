@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import './Playlist.css';
-import PlaylistItem from './PlaylistItem';
-import {List, ListItem} from 'material-ui/List';
 import Searchbar from '../searchbar/Searchbar';
+import ItemList from '../itemlist/ItemList';
 
 class Playlist extends Component {
     constructor(props) {
@@ -27,7 +26,7 @@ class Playlist extends Component {
     }
     
     render() {
-        const songs = this.props.currentPlaylistItems;
+        const items = this.props.currentPlaylistItems;
         const searchBarText = sessionStorage.getItem('CurrentSearch');
 
         return (
@@ -37,9 +36,10 @@ class Playlist extends Component {
                     onTextChange={this.onChange}
                     text={searchBarText}
                 />
-                <List>
-                    {songs ? songs.map((song, index) => <PlaylistItem key={index} title={song.Title} artist={song.Artist} album={song.Album} id={song.ID} onClick={this.onClick}></PlaylistItem>) : <ListItem>Loading...</ListItem>}
-                </List>
+                <ItemList
+                    items={items}
+                    onClick={this.onClick}
+                />
             </div>
         );
     }
