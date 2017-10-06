@@ -20,22 +20,24 @@ class Playlist extends Component {
     }
 
     onChange(e, value) {
-        sessionStorage.setItem('searchBarText', JSON.stringify(value));
+        sessionStorage.setItem('CurrentSearch', JSON.stringify(value));
     }
 
     goToSearch() {
-        var songs = this.props.currentPlaylistSongs;
-        sessionStorage.setItem('songs', JSON.stringify(songs));
+        var items = this.props.currentPlaylistItems;
+        sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(items));
         window.location = 'http://localhost:3000/search/';
     }
     
     render() {
-        const songs = this.props.currentPlaylistSongs;
+        const songs = this.props.currentPlaylistItems;
+        const searchBarText = JSON.parse(sessionStorage.getItem('CurrentSearch'));
+
         return (
             <div className="main-content">
                 <Toolbar>
                     <ToolbarGroup>
-                        <TextField hintText="Search Spotify..." onChange={this.onChange}></TextField>
+                        <TextField hintText="Search Spotify..." onChange={this.onChange} defaultValue={searchBarText || null}></TextField>
                         <FlatButton label="Go" onClick={this.goToSearch}></FlatButton>
                     </ToolbarGroup>
                 </Toolbar>

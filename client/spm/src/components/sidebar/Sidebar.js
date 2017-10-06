@@ -14,11 +14,11 @@ class Sidebar extends Component {
     }
     
     render() {
-        const playlists = this.props.userPlaylists;
+        const playlists = this.props.playlists;
         return (
             <Drawer className="sidebar" open={true}>
                 <List className="sidebar-flexlist">
-                    {playlists ? playlists.map((result, index) => <SidebarItem id={result.UUID} onClick={this.onClick} key={index} title={result.Title} creator={result.Creator} ></SidebarItem>) : <ListItem>loading...</ListItem>}
+                    {playlists ? playlists.map((playlist, index) => <SidebarItem id={playlist.UUID} onClick={this.onClick} key={index} title={playlist.Title} creator={playlist.Creator} ></SidebarItem>) : <ListItem>loading...</ListItem>}
                 </List>
             </Drawer>
         );

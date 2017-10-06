@@ -168,18 +168,18 @@ class App extends Component {
     render() {
         const userPlaylists = this.state.spotifyPlaylists;
         const currentPlaylist = this.state.currentPlaylist;
-        const currentPlaylistSongs = this.state.currentPlaylistSongs;
+        const currentPlaylistItems = this.state.currentPlaylistSongs;
         
         return ( 
             <div className="App">
                 <Sidebar
                     currentPlaylist={currentPlaylist}
-                    userPlaylists={userPlaylists}
+                    playlists={userPlaylists}
                     onClick={this.handlePlaylistChange}
                     />
                 <List
                     currentPlaylist={currentPlaylist}
-                    currentPlaylistSongs={currentPlaylistSongs}
+                    currentPlaylistItems={currentPlaylistItems}
                     onClick={this.playlistItemClicked}
                     />
             </div>

@@ -4,16 +4,18 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import PlaylistItem from '../playlist/PlaylistItem';
+import Sidebar from '../sidebar/Sidebar';
 
 class Search extends Component {
     render() {
-        const songs = JSON.parse(sessionStorage.getItem('songs'));
+        const songs = JSON.parse(sessionStorage.getItem('CurrentPlaylistItems'));
+        const searchBarText = JSON.parse(sessionStorage.getItem('CurrentSearch'));
         
         return(
             <div>
                 <Toolbar>
                     <ToolbarGroup>
-                        <TextField hintText="Search Spotify..."/>
+                        <TextField hintText="Search Spotify..." defaultValue={searchBarText || null}/>
                         <FlatButton label="Go"/>
                     </ToolbarGroup>
                 </Toolbar>
