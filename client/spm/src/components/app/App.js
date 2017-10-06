@@ -176,12 +176,12 @@ class App extends Component {
                     currentPlaylist={currentPlaylist}
                     playlists={userPlaylists}
                     onClick={this.handlePlaylistChange}
-                    />
+                />
                 <List
                     currentPlaylist={currentPlaylist}
                     currentPlaylistItems={currentPlaylistItems}
                     onClick={this.playlistItemClicked}
-                    />
+                />
             </div>
         );
     }
