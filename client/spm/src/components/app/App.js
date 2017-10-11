@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import './App.css';
 import axios from 'axios';
-import List from '../playlist/Playlist';
+import Playlist from '../playlist/Playlist';
 import Sidebar from '../sidebar/Sidebar';
+import * as API from '../../helpers/API.js';
 
 class App extends Component {
     constructor(props) {
@@ -148,6 +149,7 @@ class App extends Component {
         this.setState({
             userToken: token
         });
+        API.storeToken(token);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -168,18 +170,20 @@ class App extends Component {
     render() {
         const userPlaylists = this.state.spotifyPlaylists;
         const currentPlaylist = this.state.currentPlaylist;
-        const currentPlaylistSongs = this.state.currentPlaylistSongs;
+        const currentPlaylistItems = this.state.currentPlaylistSongs;
         
         return ( 
             <div className="App">
                 <Sidebar
                     currentPlaylist={currentPlaylist}
-                    userPlaylists={userPlaylists}
-                    onClick={this.handlePlaylistChange}/>
-                <List
+                    playlists={userPlaylists}
+                    onClick={this.handlePlaylistChange}
+                />
+                <Playlist
                     currentPlaylist={currentPlaylist}
-                    currentPlaylistSongs={currentPlaylistSongs}
-                    onClick={this.playlistItemClicked}/>
+                    currentPlaylistItems={currentPlaylistItems}
+                    onClick={this.playlistItemClicked}
+                />
             </div>
         );
     }
