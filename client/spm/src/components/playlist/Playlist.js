@@ -5,22 +5,15 @@ import ItemList from '../itemlist/ItemList';
 import * as API from '../../helpers/API.js';
 
 class Playlist extends Component {
-    constructor(props) {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this.searchButtonClicked = this.searchButtonClicked.bind(this);
-    }
-
-    onClick(value) {
+    onClick = (value) => {
         this.props.onClick(value);
     }
 
-    onChange(value) {
+    onChange = (value) => {
         sessionStorage.setItem('CurrentSearch', value);
     }
 
-    searchButtonClicked(text) {
+    searchButtonClicked = (text) => {
         var items = this.props.currentPlaylistItems;
         sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(items));
 
