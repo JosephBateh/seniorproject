@@ -12,62 +12,32 @@ class App extends Component {
             currentPlaylist: null,
             currentPlaylistSongs: null,
             userID: null,
-            userToken: null,
             spotifyPlaylists: null
         };
         
         this.handlePlaylistChange = this.handlePlaylistChange.bind(this);
         this.playlistItemClicked = this.playlistItemClicked.bind(this);
-        this.getSpotifyUser = this.getSpotifyUser.bind(this);
         this.getSpotifyPlaylists = this.getSpotifyPlaylists.bind(this);
         this.getSpotifyPlaylistSongs = this.getSpotifyPlaylistSongs.bind(this);
         this.deleteSongsFromPlaylist = this.deleteSongsFromPlaylist.bind(this);
     }
 
-    getSpotifyUser() {
-        axios({
-            method: "GET",
-            baseURL: "https://api.spotify.com",
-            url: "/v1/me",
-            headers: {'Authorization': 'Bearer ' + this.state.userToken},
-          })
-          .then((response) => {
+    getUser = () => {
+        API.getUser(this.props.userToken).then((ID) => {
+            this.props.updateUserID(ID);
             this.setState({
-                userID: response.data.id
-            });
-          })
-          .catch(function(err) {
-              console.log(err);
-          });
+                userID: ID
+            })
+        });
     }
 
     getSpotifyPlaylists() {
-        axios({
-            method: "GET",
-            baseURL: "https://api.spotify.com",
-            url: "/v1/users/" + this.state.userID + "/playlists",
-            headers: {'Authorization': 'Bearer ' + this.state.userToken},
-          })
-          .then((response) => {
-            var playlists = response.data.items;
-            var objects = [];
-            
-            for (var key in playlists) {
-                objects.push({
-                    Creator: "Joseph Bateh",
-                    Title: playlists[key].name,
-                    UUID: playlists[key].id
-                });
-            }
-
+        API.getPlaylists(this.props.userToken, this.state.userID).then((playlists) => {
             this.setState({
-                spotifyPlaylists: objects,
-                currentPlaylist: objects[0].UUID
-            });
-          })
-          .catch(function(err) {
-              console.log(err);
-          });
+                spotifyPlaylists: playlists,
+                currentPlaylist: playlists[0].UUID
+            })
+        });
     }
 
     getSpotifyPlaylistSongs() {
@@ -75,7 +45,7 @@ class App extends Component {
             method: "GET",
             baseURL: "https://api.spotify.com",
             url: "/v1/users/" + this.state.userID + "/playlists/" + this.state.currentPlaylist + "/tracks",
-            headers: {'Authorization': 'Bearer ' + this.state.userToken},
+            headers: {'Authorization': 'Bearer ' + this.props.userToken},
           })
           .then((response) => {
             const currentPlaylistSongs = response.data.items.map( song => {
@@ -140,20 +110,18 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.getSpotifyUser();
+        this.getUser();
     }
 
     componentWillMount() {
-        // This is dirty, I know
-        var token = this.props.location.hash.split('=')[1].split('&')[0];
-        this.setState({
-            userToken: token
-        });
-        API.storeToken(token);
+
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextState !== this.state) {
+            return true;
+        }
+        if (nextProps !== this.props) {
             return true;
         }
         return false;

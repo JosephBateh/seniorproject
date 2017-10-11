@@ -6,6 +6,47 @@ if (process.env.NODE_ENV === 'production') {
     REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 }
 
+export function getUser(token) {
+    return axios({
+        method: "GET",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/me",
+        headers: {'Authorization': 'Bearer ' + token},
+      })
+      .then((response) => {
+        return response.data.id;
+      })
+      .catch((err) => {
+          console.log(err);
+      });
+}
+
+export function getPlaylists(token, id) {
+    return axios({
+        method: "GET",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/users/" + id + "/playlists",
+        headers: {'Authorization': 'Bearer ' + token},
+      })
+      .then((response) => {
+        var playlists = response.data.items;
+        var objects = [];
+        
+        for (var key in playlists) {
+            objects.push({
+                Creator: "Joseph Bateh",
+                Title: playlists[key].name,
+                UUID: playlists[key].id
+            });
+        }
+
+        return objects;
+      })
+      .catch(function(err) {
+          console.log(err);
+      });
+}
+
 export function searchSpotify(query) {
     return axios({
         method: "GET",
@@ -46,8 +87,4 @@ export function authorize() {
     .catch(e => {
         console.log(e);
     });
-}
-
-export function storeToken(token) {
-    sessionStorage.setItem('UserToken', token);
 }
