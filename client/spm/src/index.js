@@ -52,7 +52,7 @@ class Root extends Component {
                                     return (
                                         <Callback
                                             updateUserToken={this.updateUserToken}
-                                            userToken={this.userToken}
+                                            userToken={this.state.userToken}
                                         />
                                     );
                                 }
