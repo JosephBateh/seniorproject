@@ -8,7 +8,7 @@ import PlaylistItem from '../playlist/PlaylistItem';
 class Search extends Component {
     render() {
         const songs = JSON.parse(sessionStorage.getItem('CurrentPlaylistItems'));
-        const searchBarText = JSON.parse(sessionStorage.getItem('CurrentSearch'));
+        const searchBarText = sessionStorage.getItem('CurrentSearch');
         
         return(
             <div>

@@ -24,10 +24,30 @@ class Playlist extends Component {
         var items = this.props.currentPlaylistItems;
         sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(items));
 
-        // TODO: Make sure text isn't null or empty
+        // API call fails if text is null or empty
+        if (text) {
+            API.searchSpotify(text).then((data) => {
+                // Parse JSON into my model
+                var x = data.data.tracks.items.map( item => {
+                    x = {
+                        ID: item.id,
+                        Title: item.name,
+                        Artist: item.artists[0].name,
+                        Album: item.album.name
+                    }
+                    return x;
+                });
 
-        API.searchSpotify(text).then((data) => {console.log(data)});
-        window.location = 'http://localhost:3000/search/';
+                console.log(data);
+                console.log(items);
+
+                return x;
+            })
+            .then(x => {
+                sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(x));
+                window.location = 'http://localhost:3000/search/';
+            });
+        }
     }
     
     render() {
