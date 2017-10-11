@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export function searchSpotify(query) {
-    axios({
+    return axios({
         method: "GET",
         baseURL: "https://api.spotify.com/v1/",
         url: "search/",
@@ -16,9 +16,6 @@ export function searchSpotify(query) {
             q: query,
             type: "track,artist,album"
         }
-      })
-      .then((response) => {
-        return response;
       })
       .catch(function(err) {
           console.log(err);
