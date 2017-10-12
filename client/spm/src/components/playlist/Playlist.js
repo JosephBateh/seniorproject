@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import './Playlist.css';
 import Searchbar from '../searchbar/Searchbar';
-import ItemList from '../itemlist/ItemList';
 import * as API from '../../helpers/API.js';
+import {List, ListItem as Item} from 'material-ui/List';
+import PlaylistItem from './PlaylistItem';
 
 class Playlist extends Component {
     onClick = (value) => {
@@ -11,6 +12,10 @@ class Playlist extends Component {
 
     onChange = (value) => {
         sessionStorage.setItem('CurrentSearch', value);
+    }
+
+    deleteItems = (items) => {
+        this.props.deleteItems(items);
     }
 
     searchButtonClicked = (text) => {
@@ -50,10 +55,9 @@ class Playlist extends Component {
                     onTextChange={this.onChange}
                     text={searchBarText}
                 />
-                <ItemList
-                    items={items}
-                    onClick={this.onClick}
-                />
+                <List>
+                    {items ? items.map((item, index) => <PlaylistItem key={index} title={item.Title} artist={item.Artist} album={item.Album} id={item.ID} delete={this.deleteItems}></PlaylistItem>) : <Item>Loading...</Item>}
+                </List>
             </div>
         );
     }

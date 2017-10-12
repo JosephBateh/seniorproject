@@ -38,7 +38,7 @@ class App extends Component {
         this.setState({currentPlaylist: value});
     }
 
-    playlistItemClicked = (value) => {
+    deleteItems = (value) => {
         API.deleteItems([value], this.state.currentPlaylist);
     }
 
@@ -74,7 +74,7 @@ class App extends Component {
                 <Playlist
                     currentPlaylist={this.state.currentPlaylist}
                     currentListItems={this.state.currentPlaylistItems}
-                    onClick={this.playlistItemClicked}
+                    deleteItems={this.deleteItems}
                 />
             </div>
         );
