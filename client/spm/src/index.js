@@ -14,19 +14,6 @@ import registerServiceWorker from './registerServiceWorker';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Root extends Component {
-    state = {
-        currentPlaylist: null,
-        userID: null,
-        userToken: null
-    }
-
-    updateState = (name, value) => {
-        this.setState({
-            [name]: value
-        });
-    }
-
-
     render() {
         return (
             <MuiThemeProvider>
