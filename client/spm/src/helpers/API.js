@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 var REDIRECT_URI = 'http://localhost:3000/callback/';
+var TOKEN = getToken();
+var USER_ID = getUserID();
 
 if (process.env.NODE_ENV === 'production') {
     REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
@@ -18,8 +20,8 @@ export function getUserID() {
     return sessionStorage.getItem('userID');
 }
 
-export function setUserID(userID) {
-    sessionStorage.setItem('userID', userID);
+export function setUserID(id) {
+    sessionStorage.setItem('userID', id);
 }
 
 export function getUser(token) {
@@ -63,12 +65,12 @@ export function getPlaylists(token, id) {
       });
 }
 
-export function searchSpotify(token, query) {
+export function searchSpotify(query) {
     return axios({
         method: "GET",
         baseURL: "https://api.spotify.com/v1/",
         url: "search/",
-        headers: {'Authorization': 'Bearer ' + token},
+        headers: {'Authorization': 'Bearer ' + TOKEN},
         params: {
             q: query,
             type: "track,artist,album"
@@ -103,4 +105,50 @@ export function authorize() {
     .catch(e => {
         console.log(e);
     });
+}
+
+export function getPlaylistItems(playlist) {
+    return axios({
+        method: "GET",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/users/" + USER_ID + "/playlists/" + playlist + "/tracks",
+        headers: {'Authorization': 'Bearer ' + TOKEN},
+      })
+      .then((response) => {
+        return response.data.items.map( Item => {
+            return {
+                ID: Item.track.id,
+                Title: Item.track.name,
+                Artist: Item.track.artists[0].name,
+                Album: Item.track.album.name
+            };
+        });
+      })
+      .catch(function(err) {
+          console.log(err);
+      });
+}
+
+// Takes an array with the ids to be deleted
+export function deleteItems(items, playlist) {
+    var itemsArray = items.map( item => {
+        return {
+            "uri": "spotify:track:" + item
+        }
+    });
+
+    const tracks = {
+        tracks: itemsArray
+    }
+
+    return axios({
+        method: "DELETE",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/users/" + USER_ID + "/playlists/" + playlist + "/tracks",
+        headers: {'Authorization': 'Bearer ' + TOKEN},
+        data: tracks
+      })
+      .catch(function(err) {
+          console.log(err);
+      });
 }

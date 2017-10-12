@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import Playlist from '../playlist/Playlist';
 import Sidebar from '../sidebar/Sidebar';
 import * as API from '../../helpers/API.js';
@@ -18,7 +17,7 @@ class App extends Component {
         });
     }
 
-    getSpotifyPlaylists = () => {
+    getUserPlaylists = () => {
         API.getPlaylists(API.getToken(), API.getUserID()).then((playlists) => {
             this.setState({
                 userPlaylists: playlists,
@@ -27,54 +26,12 @@ class App extends Component {
         });
     }
 
-    getSpotifyPlaylistItems = () => {
-        axios({
-            method: "GET",
-            baseURL: "https://api.spotify.com",
-            url: "/v1/users/" + API.getUserID() + "/playlists/" + this.state.currentPlaylist + "/tracks",
-            headers: {'Authorization': 'Bearer ' + API.getToken()},
-          })
-          .then((response) => {
-            const currentPlaylistItems = response.data.items.map( Item => {
-                return {
-                    ID: Item.track.id,
-                    Title: Item.track.name,
-                    Artist: Item.track.artists[0].name,
-                    Album: Item.track.album.name
-                };
-            });
-
+    getPlaylistItems = () => {
+        API.getPlaylistItems(this.state.currentPlaylist).then((items) => {        
             this.setState({
-                currentPlaylistItems
+                currentPlaylistItems: items
             });
-          })
-          .catch(function(err) {
-              console.log(err);
-          });
-    }
-
-    deleteItemsFromPlaylist = (toBeDeleted) => {
-        const tracks = {
-            "tracks": [
-                { "uri": "spotify:track:" + toBeDeleted }
-            ]
-        }
-
-        axios({
-            method: "DELETE",
-            baseURL: "https://api.spotify.com",
-            url: "/v1/users/" + API.getUserID() + "/playlists/" + this.state.currentPlaylist + "/tracks",
-            headers: {'Authorization': 'Bearer ' + API.getToken()},
-            data: tracks
-          })
-          .then((response) => {
-            console.log(response);
-          })
-          .catch(function(err) {
-              console.log(err);
-          });
-
-        // TODO: Delete from view
+        });
     }
     
     handlePlaylistChange = (value) => {
@@ -82,16 +39,12 @@ class App extends Component {
     }
 
     playlistItemClicked = (value) => {
-        this.deleteItemsFromPlaylist(value);
-    }
-
-    componentDidMount() {
-        
+        API.deleteItems([value], this.state.currentPlaylist);
     }
 
     componentWillMount() {
         this.getUser();
-        this.getSpotifyPlaylists();
+        this.getUserPlaylists();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -106,7 +59,7 @@ class App extends Component {
 
     componentDidUpdate(nextProps, nextState) {
         if (nextState.currentPlaylist !== this.state.currentPlaylist) {
-            this.getSpotifyPlaylistItems();
+            this.getPlaylistItems();
         }
     }
 

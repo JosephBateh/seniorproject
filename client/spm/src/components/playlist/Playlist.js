@@ -16,11 +16,10 @@ class Playlist extends Component {
     searchButtonClicked = (text) => {
         var items = this.props.currentListItems;
         sessionStorage.setItem('CurrentListItems', JSON.stringify(items));
-        var token = API.getToken();
 
         // API call fails if text is null or empty
         if (text) {
-            API.searchSpotify(token, text).then((data) => {
+            API.searchSpotify(text).then((data) => {
                 // Parse JSON into my model
                 var x = data.data.tracks.items.map( item => {
                     x = {
