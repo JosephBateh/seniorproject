@@ -26,18 +26,6 @@ class Root extends Component {
         });
     }
 
-    updateUserID = (value) => {
-        this.updateState('userID', value);
-    }
-
-    updateUserToken = (value) => {
-        this.updateState('userToken', value);
-    }
-
-    updateCurrentPlaylist = (value) => {
-        this.updateState('currentPlaylist', value);
-    }
-
 
     render() {
         return (
@@ -46,32 +34,9 @@ class Root extends Component {
                     <Switch>
                         <Route exact path="/" component={Login}/>
 
-                        <Route path="/callback" render={
-                                () => {
-                                    return (
-                                        <Callback
-                                            updateUserToken={this.updateUserToken}
-                                            userToken={this.state.userToken}
-                                        />
-                                    );
-                                }
-                            }
-                        />
-                        
-                        <Route
-                            path="/app"
-                            render={
-                                () => {
-                                    return (
-                                        <App 
-                                            updateUserID={this.updateUserID}
-                                            updateUserToken={this.updateUserToken}
-                                            userToken={this.state.userToken}
-                                        />
-                                    );
-                                }
-                            }
-                        />
+                        <Route path="/callback" component={Callback}/>
+
+                        <Route path="/app" component={App}/>
 
                         <Route path="/search" component={Search}/>
                     </Switch>

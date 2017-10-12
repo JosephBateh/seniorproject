@@ -14,12 +14,13 @@ class Playlist extends Component {
     }
 
     searchButtonClicked = (text) => {
-        var items = this.props.currentPlaylistItems;
-        sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(items));
+        var items = this.props.currentListItems;
+        sessionStorage.setItem('CurrentListItems', JSON.stringify(items));
+        var token = API.getToken();
 
         // API call fails if text is null or empty
         if (text) {
-            API.searchSpotify(text).then((data) => {
+            API.searchSpotify(token, text).then((data) => {
                 // Parse JSON into my model
                 var x = data.data.tracks.items.map( item => {
                     x = {
@@ -30,21 +31,17 @@ class Playlist extends Component {
                     }
                     return x;
                 });
-
-                console.log(data);
-                console.log(items);
-
                 return x;
             })
             .then(x => {
-                sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(x));
+                sessionStorage.setItem('CurrentListItems', JSON.stringify(x));
                 window.location = 'http://localhost:3000/search/';
             });
         }
     }
     
     render() {
-        const items = this.props.currentPlaylistItems;
+        const items = this.props.currentListItems;
         const searchBarText = sessionStorage.getItem('CurrentSearch');
 
         return (

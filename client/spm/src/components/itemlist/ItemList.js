@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import PlaylistItem from './PlaylistItem';
-import {List, ListItem} from 'material-ui/List';
+import ListItem from './ListItem';
+import {List, ListItem as Item} from 'material-ui/List';
 
 class ItemList extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class ItemList extends Component {
         return (
             <div className="item-list">
                 <List>
-                    {items ? items.map((item, index) => <PlaylistItem key={index} title={item.Title} artist={item.Artist} album={item.Album} id={item.ID} onClick={this.onClick}></PlaylistItem>) : <ListItem>Loading...</ListItem>}
+                    {items ? items.map((item, index) => <ListItem key={index} title={item.Title} artist={item.Artist} album={item.Album} id={item.ID} onClick={this.onClick}></ListItem>) : <Item>Loading...</Item>}
                 </List>
             </div>
         );

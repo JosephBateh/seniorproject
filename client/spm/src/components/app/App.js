@@ -6,33 +6,21 @@ import Sidebar from '../sidebar/Sidebar';
 import * as API from '../../helpers/API.js';
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentPlaylist: null,
-            currentPlaylistSongs: null,
-            userID: null,
-            spotifyPlaylists: null
-        };
-        
-        this.handlePlaylistChange = this.handlePlaylistChange.bind(this);
-        this.playlistItemClicked = this.playlistItemClicked.bind(this);
-        this.getSpotifyPlaylists = this.getSpotifyPlaylists.bind(this);
-        this.getSpotifyPlaylistSongs = this.getSpotifyPlaylistSongs.bind(this);
-        this.deleteSongsFromPlaylist = this.deleteSongsFromPlaylist.bind(this);
+    state = {
+        currentPlaylist: null,
+        currentPlaylistSongs: null,
+        spotifyPlaylists: null
     }
 
     getUser = () => {
-        API.getUser(this.props.userToken).then((ID) => {
-            this.props.updateUserID(ID);
-            this.setState({
-                userID: ID
-            })
+        API.getUser(API.getToken())
+        .then((ID) => {
+            API.setUserID(ID);
         });
     }
 
-    getSpotifyPlaylists() {
-        API.getPlaylists(this.props.userToken, this.state.userID).then((playlists) => {
+    getSpotifyPlaylists = () => {
+        API.getPlaylists(API.getToken(), API.getUserID()).then((playlists) => {
             this.setState({
                 spotifyPlaylists: playlists,
                 currentPlaylist: playlists[0].UUID
@@ -40,12 +28,12 @@ class App extends Component {
         });
     }
 
-    getSpotifyPlaylistSongs() {
+    getSpotifyPlaylistSongs = () => {
         axios({
             method: "GET",
             baseURL: "https://api.spotify.com",
-            url: "/v1/users/" + this.state.userID + "/playlists/" + this.state.currentPlaylist + "/tracks",
-            headers: {'Authorization': 'Bearer ' + this.props.userToken},
+            url: "/v1/users/" + API.getUserID() + "/playlists/" + this.state.currentPlaylist + "/tracks",
+            headers: {'Authorization': 'Bearer ' + API.getToken()},
           })
           .then((response) => {
             const currentPlaylistSongs = response.data.items.map( song => {
@@ -66,17 +54,8 @@ class App extends Component {
           });
     }
 
-    deleteSongsFromPlaylist(toBeDeleted) {
-        // const tracksList = toBeDeleted.map( track => {
-        //     return {
-        //         "uri": "spotify:track:" + track.id
-        //     };
-        // });
-
+    deleteSongsFromPlaylist = (toBeDeleted) => {
         const tracks = {
-            // "tracks": [
-            //     tracksList
-            // ]
             "tracks": [
                 { "uri": "spotify:track:" + toBeDeleted }
             ]
@@ -85,8 +64,8 @@ class App extends Component {
         axios({
             method: "DELETE",
             baseURL: "https://api.spotify.com",
-            url: "/v1/users/" + this.state.userID + "/playlists/" + this.state.currentPlaylist + "/tracks",
-            headers: {'Authorization': 'Bearer ' + this.state.userToken},
+            url: "/v1/users/" + API.getUserID() + "/playlists/" + this.state.currentPlaylist + "/tracks",
+            headers: {'Authorization': 'Bearer ' + API.getToken()},
             data: tracks
           })
           .then((response) => {
@@ -96,25 +75,24 @@ class App extends Component {
               console.log(err);
           });
 
-        //var currentState = this.state.currentPlaylistSongs;
-        // Delete from view
+        // TODO: Delete from view
     }
     
-    handlePlaylistChange(value) {
+    handlePlaylistChange = (value) => {
         this.setState({currentPlaylist: value});
     }
 
-    playlistItemClicked(value) {
-        console.log("PlaylistItemClicked: " + value);
+    playlistItemClicked = (value) => {
         this.deleteSongsFromPlaylist(value);
     }
 
     componentDidMount() {
-        this.getUser();
+        
     }
 
     componentWillMount() {
-
+        this.getUser();
+        this.getSpotifyPlaylists();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -128,9 +106,7 @@ class App extends Component {
     }
 
     componentDidUpdate(nextProps, nextState) {
-        if (nextState.userID !== this.state.userID) {
-            this.getSpotifyPlaylists();
-        } else if (nextState.currentPlaylist !== this.state.currentPlaylist) {
+        if (nextState.currentPlaylist !== this.state.currentPlaylist) {
             this.getSpotifyPlaylistSongs();
         }
     }
@@ -138,7 +114,7 @@ class App extends Component {
     render() {
         const userPlaylists = this.state.spotifyPlaylists;
         const currentPlaylist = this.state.currentPlaylist;
-        const currentPlaylistItems = this.state.currentPlaylistSongs;
+        const currentListItems = this.state.currentPlaylistSongs;
         
         return ( 
             <div className="App">
@@ -149,7 +125,7 @@ class App extends Component {
                 />
                 <Playlist
                     currentPlaylist={currentPlaylist}
-                    currentPlaylistItems={currentPlaylistItems}
+                    currentListItems={currentListItems}
                     onClick={this.playlistItemClicked}
                 />
             </div>

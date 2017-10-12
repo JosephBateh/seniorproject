@@ -6,6 +6,22 @@ if (process.env.NODE_ENV === 'production') {
     REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 }
 
+export function getToken() {
+    return sessionStorage.getItem('userToken');
+}
+
+export function setToken(token) {
+    sessionStorage.setItem('userToken', token);
+}
+
+export function getUserID() {
+    return sessionStorage.getItem('userID');
+}
+
+export function setUserID(userID) {
+    sessionStorage.setItem('userID', userID);
+}
+
 export function getUser(token) {
     return axios({
         method: "GET",
@@ -47,12 +63,12 @@ export function getPlaylists(token, id) {
       });
 }
 
-export function searchSpotify(query) {
+export function searchSpotify(token, query) {
     return axios({
         method: "GET",
         baseURL: "https://api.spotify.com/v1/",
         url: "search/",
-        headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('UserToken')},
+        headers: {'Authorization': 'Bearer ' + token},
         params: {
             q: query,
             type: "track,artist,album"

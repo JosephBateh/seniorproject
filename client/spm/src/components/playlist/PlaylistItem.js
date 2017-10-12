@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import {ListItem} from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton';
 
-class PlaylistItem extends Component {
+class ListItem extends Component {
     constructor(props) {
         super(props);
         this.onClick = this.onClick.bind(this);
     }
 
     onClick() {
-        console.log("PlaylistItem clicked: " + this.props.id);
+        console.log("ListItem clicked: " + this.props.id);
         this.props.onClick(this.props.id);
     }
     
@@ -25,4 +25,4 @@ class PlaylistItem extends Component {
     }
 }
 
-export default PlaylistItem;
+export default ListItem;
