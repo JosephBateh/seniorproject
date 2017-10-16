@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {List} from 'material-ui/List';
-import ListItem from '../itemlist/ListItem';
+import ListItem from '../search/SearchItem';
 import Searchbar from '../searchbar/Searchbar';
 
 class Search extends Component {
