@@ -29,9 +29,12 @@ class Searchbar extends Component {
             })
             .then(x => {
                 sessionStorage.setItem('CurrentListItems', JSON.stringify(x));
-                if (window.location !== 'http://localhost:3000/search/') {
-                    window.location = 'http://localhost:3000/search/';
+                var url = 'http://localhost:3000/';
+                if (process.env.NODE_ENV === 'production') {
+                    url = process.env.REACT_APP_BASE_URL;
                 }
+                url += 'search/';
+                window.location = url;
             });
         }
     }
