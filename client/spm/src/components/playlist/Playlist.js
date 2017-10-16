@@ -1,28 +1,26 @@
 import React, {Component} from 'react';
 import './Playlist.css';
 import Searchbar from '../searchbar/Searchbar';
-import ItemList from '../itemlist/ItemList';
 import * as API from '../../helpers/API.js';
+import {List, ListItem as Item} from 'material-ui/List';
+import PlaylistItem from './PlaylistItem';
 
 class Playlist extends Component {
-    constructor(props) {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this.searchButtonClicked = this.searchButtonClicked.bind(this);
-    }
-
-    onClick(value) {
+    onClick = (value) => {
         this.props.onClick(value);
     }
 
-    onChange(value) {
+    onChange = (value) => {
         sessionStorage.setItem('CurrentSearch', value);
     }
 
-    searchButtonClicked(text) {
-        var items = this.props.currentPlaylistItems;
-        sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(items));
+    deleteItems = (items) => {
+        this.props.deleteItems(items);
+    }
+
+    searchButtonClicked = (text) => {
+        var items = this.props.currentListItems;
+        sessionStorage.setItem('CurrentListItems', JSON.stringify(items));
 
         // API call fails if text is null or empty
         if (text) {
@@ -37,21 +35,17 @@ class Playlist extends Component {
                     }
                     return x;
                 });
-
-                console.log(data);
-                console.log(items);
-
                 return x;
             })
             .then(x => {
-                sessionStorage.setItem('CurrentPlaylistItems', JSON.stringify(x));
+                sessionStorage.setItem('CurrentListItems', JSON.stringify(x));
                 window.location = 'http://localhost:3000/search/';
             });
         }
     }
     
     render() {
-        const items = this.props.currentPlaylistItems;
+        const items = this.props.currentListItems;
         const searchBarText = sessionStorage.getItem('CurrentSearch');
 
         return (
@@ -61,10 +55,9 @@ class Playlist extends Component {
                     onTextChange={this.onChange}
                     text={searchBarText}
                 />
-                <ItemList
-                    items={items}
-                    onClick={this.onClick}
-                />
+                <List>
+                    {items ? items.map((item, index) => <PlaylistItem key={index} title={item.Title} artist={item.Artist} album={item.Album} id={item.ID} delete={this.deleteItems}></PlaylistItem>) : <Item>Loading...</Item>}
+                </List>
             </div>
         );
     }

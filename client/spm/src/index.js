@@ -4,6 +4,7 @@ import './index.css';
 import App from './components/app/App';
 import Login from './components/login/Login';
 import Search from './components/search/Search';
+import Callback from './components/callback/Callback';
 import {
     BrowserRouter as Router,
     Route,
@@ -18,15 +19,13 @@ class Root extends Component {
             <MuiThemeProvider>
                 <Router>
                     <Switch>
-                        <Route exact path="/" component={Login}>
+                        <Route exact path="/" component={Login}/>
 
-                        </Route>
-                        <Route path="/callback" component={App}>
-                            
-                        </Route>
-                        <Route path="/search" component={Search}>
-                        
-                        </Route>
+                        <Route path="/callback" component={Callback}/>
+
+                        <Route path="/app" component={App}/>
+
+                        <Route path="/search" component={Search}/>
                     </Switch>
                 </Router>
             </MuiThemeProvider>

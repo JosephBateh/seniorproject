@@ -1,9 +1,68 @@
 import axios from 'axios';
 
 var REDIRECT_URI = 'http://localhost:3000/callback/';
+var TOKEN = getToken();
+var USER_ID = getUserID();
 
 if (process.env.NODE_ENV === 'production') {
     REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+}
+
+export function getToken() {
+    return sessionStorage.getItem('userToken');
+}
+
+export function setToken(token) {
+    sessionStorage.setItem('userToken', token);
+}
+
+export function getUserID() {
+    return sessionStorage.getItem('userID');
+}
+
+export function setUserID(id) {
+    sessionStorage.setItem('userID', id);
+}
+
+export function getUser(token) {
+    return axios({
+        method: "GET",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/me",
+        headers: {'Authorization': 'Bearer ' + token},
+      })
+      .then((response) => {
+        return response.data.id;
+      })
+      .catch((err) => {
+          console.log(err);
+      });
+}
+
+export function getPlaylists(token, id) {
+    return axios({
+        method: "GET",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/users/" + id + "/playlists",
+        headers: {'Authorization': 'Bearer ' + token},
+      })
+      .then((response) => {
+        var playlists = response.data.items;
+        var objects = [];
+        
+        for (var key in playlists) {
+            objects.push({
+                Creator: "Joseph Bateh",
+                Title: playlists[key].name,
+                UUID: playlists[key].id
+            });
+        }
+
+        return objects;
+      })
+      .catch(function(err) {
+          console.log(err);
+      });
 }
 
 export function searchSpotify(query) {
@@ -11,7 +70,7 @@ export function searchSpotify(query) {
         method: "GET",
         baseURL: "https://api.spotify.com/v1/",
         url: "search/",
-        headers: {'Authorization': 'Bearer ' + sessionStorage.getItem('UserToken')},
+        headers: {'Authorization': 'Bearer ' + TOKEN},
         params: {
             q: query,
             type: "track,artist,album"
@@ -48,6 +107,48 @@ export function authorize() {
     });
 }
 
-export function storeToken(token) {
-    sessionStorage.setItem('UserToken', token);
+export function getPlaylistItems(playlist) {
+    return axios({
+        method: "GET",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/users/" + USER_ID + "/playlists/" + playlist + "/tracks",
+        headers: {'Authorization': 'Bearer ' + TOKEN},
+      })
+      .then((response) => {
+        return response.data.items.map( Item => {
+            return {
+                ID: Item.track.id,
+                Title: Item.track.name,
+                Artist: Item.track.artists[0].name,
+                Album: Item.track.album.name
+            };
+        });
+      })
+      .catch(function(err) {
+          console.log(err);
+      });
+}
+
+// Takes an array with the ids to be deleted
+export function deleteItems(items, playlist) {
+    var itemsArray = items.map( item => {
+        return {
+            "uri": "spotify:track:" + item
+        }
+    });
+
+    const tracks = {
+        tracks: itemsArray
+    }
+
+    return axios({
+        method: "DELETE",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/users/" + USER_ID + "/playlists/" + playlist + "/tracks",
+        headers: {'Authorization': 'Bearer ' + TOKEN},
+        data: tracks
+      })
+      .catch(function(err) {
+          console.log(err);
+      });
 }
