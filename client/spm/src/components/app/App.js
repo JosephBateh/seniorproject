@@ -39,7 +39,23 @@ class App extends Component {
     }
 
     deleteItems = (value) => {
-        API.deleteItems([value], this.state.currentPlaylist);
+        var newItems = [];
+
+        this.state.currentPlaylistItems.map( (item) => {
+            if (item.ID !== value) {
+                newItems.push(item);
+            }
+            return item;
+        });
+        
+        API.deleteItems([value], this.state.currentPlaylist)
+        .then((retVal) => {
+            if (retVal.status === 200) {
+                this.setState({
+                    currentPlaylistItems: newItems
+                })
+            }
+        });
     }
 
     componentWillMount() {
