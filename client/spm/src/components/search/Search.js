@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {List} from 'material-ui/List';
-import ListItem from '../search/SearchItem';
+import SearchItem from '../search/SearchItem';
 import Searchbar from '../searchbar/Searchbar';
 
 class Search extends Component {
@@ -11,7 +11,7 @@ class Search extends Component {
             <div>
                 <Searchbar/>
                 <List>
-                    {songs ? songs.map((song, index) => <ListItem key={index} title={song.Title} artist={song.Artist} album={song.Album} id={song.ID} onClick={this.onClick}></ListItem>) : <ListItem>Loading...</ListItem>}
+                    {songs ? songs.map((song, index) => <SearchItem key={index} title={song.Title} artist={song.Artist} album={song.Album} id={song.ID}></SearchItem>) : <SearchItem>Loading...</SearchItem>}
                 </List>
             </div>
         );
