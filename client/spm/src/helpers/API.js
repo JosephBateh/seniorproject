@@ -43,7 +43,7 @@ export function getPlaylists(USER_ID) {
     return axios({
         method: "GET",
         baseURL: "https://api.spotify.com",
-        url: "/v1/users/" + USER_ID + "/playlists",
+        url: "/v1/users/" + getUserID() + "/playlists",
         headers: {'Authorization': 'Bearer ' + TOKEN},
       })
       .then((response) => {
@@ -57,7 +57,6 @@ export function getPlaylists(USER_ID) {
                 UUID: playlists[key].id
             });
         }
-
         return objects;
       })
       .catch(function(err) {
