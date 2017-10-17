@@ -41,7 +41,7 @@ class App extends Component {
     deleteItems = (value) => {
         var newItems = this.state.currentPlaylistItems.filter( (item) =>
             item.ID !== value
-        });
+        );
         
         API.deleteItems([value], this.state.currentPlaylist)
         .then((retVal) => {
