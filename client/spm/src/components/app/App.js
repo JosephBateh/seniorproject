@@ -18,7 +18,7 @@ class App extends Component {
     }
 
     getUserPlaylists = () => {
-        API.getPlaylists(API.getToken(), API.getUserID()).then((playlists) => {
+        API.getPlaylists().then((playlists) => {
             this.setState({
                 userPlaylists: playlists,
                 currentPlaylist: playlists[0].UUID

@@ -39,12 +39,12 @@ export function getUser(token) {
       });
 }
 
-export function getPlaylists(token, id) {
+export function getPlaylists(USER_ID) {
     return axios({
         method: "GET",
         baseURL: "https://api.spotify.com",
-        url: "/v1/users/" + id + "/playlists",
-        headers: {'Authorization': 'Bearer ' + token},
+        url: "/v1/users/" + USER_ID + "/playlists",
+        headers: {'Authorization': 'Bearer ' + TOKEN},
       })
       .then((response) => {
         var playlists = response.data.items;

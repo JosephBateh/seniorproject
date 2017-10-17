@@ -4,11 +4,23 @@ import IconButton from 'material-ui/IconButton';
 import MoreIcon from 'material-ui/svg-icons/navigation/more-horiz';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import MoreMenu from './MoreMenu';
+import * as API from '../../helpers/API'
 
 class SearchItem extends Component {
+    state = {
+        playlists: null
+    }
+    
     moreButtonClicked = (e) => {
         console.log(this.props.id);
+    }
+
+    addToPlaylist = (e) => {
+        console.log(e);
+    }
+
+    componentWillMount() {
+        //var playlists = API.getPlaylists();
     }
 
     render() {
