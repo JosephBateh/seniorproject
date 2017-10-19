@@ -1,27 +1,25 @@
 import axios from 'axios';
 
-var REDIRECT_URI = 'http://localhost:3000/callback/';
-var TOKEN = getToken();
-var USER_ID = getUserID();
-
-if (process.env.NODE_ENV === 'production') {
-    REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-}
+const REDIRECT_URI = process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_REDIRECT_URI 
+    : "http://localhost:3000/callback/";
+const USER_TOKEN = 'userToken';
+const USER_ID = 'userID';
 
 export function getToken() {
-    return sessionStorage.getItem('userToken');
+    return sessionStorage.getItem(USER_TOKEN);
 }
 
 export function setToken(token) {
-    sessionStorage.setItem('userToken', token);
+    sessionStorage.setItem(USER_TOKEN, token);
 }
 
 export function getUserID() {
-    return sessionStorage.getItem('userID');
+    return sessionStorage.getItem(USER_ID);
 }
 
 export function setUserID(id) {
-    sessionStorage.setItem('userID', id);
+    sessionStorage.setItem(USER_ID, id);
 }
 
 export function getUser(token) {
@@ -39,26 +37,23 @@ export function getUser(token) {
       });
 }
 
-export function getPlaylists(token, id) {
+export function getPlaylists() {
     return axios({
         method: "GET",
         baseURL: "https://api.spotify.com",
-        url: "/v1/users/" + id + "/playlists",
-        headers: {'Authorization': 'Bearer ' + token},
+        url: "/v1/users/" + getUserID() + "/playlists",
+        headers: {'Authorization': 'Bearer ' + getToken()},
       })
       .then((response) => {
         var playlists = response.data.items;
-        var objects = [];
-        
-        for (var key in playlists) {
-            objects.push({
-                Creator: "Joseph Bateh",
-                Title: playlists[key].name,
-                UUID: playlists[key].id
-            });
-        }
 
-        return objects;
+        return playlists.map( (playlist) => {
+            return {
+                Creator: "Joseph Bateh",
+                Title: playlist.name,
+                UUID: playlist.id
+            };
+        });
       })
       .catch(function(err) {
           console.log(err);
@@ -70,25 +65,27 @@ export function searchSpotify(query) {
         method: "GET",
         baseURL: "https://api.spotify.com/v1/",
         url: "search/",
-        headers: {'Authorization': 'Bearer ' + TOKEN},
+        headers: {'Authorization': 'Bearer ' + getToken()},
         params: {
             q: query,
             type: "track,artist,album"
         }
       })
-      .catch(function(err) {
-          console.log(err);
+      .catch(e => {
+          console.log(e);
       });
 }
 
 export function authorize() {
-    var apiScope = 'playlist-read-private';
-    apiScope += ' playlist-modify-public';
-    apiScope += ' playlist-modify-private';
-    apiScope += ' user-library-read';
-    apiScope += ' user-library-modify';
-    apiScope += ' user-read-currently-playing';
-    apiScope += ' user-read-recently-played';
+    var apiScope = [
+        'playlist-read-private',
+        'playlist-modify-public',
+        'playlist-modify-private',
+        'user-library-read',
+        'user-library-modify',
+        'user-read-currently-playing',
+        'user-read-recently-played'
+    ].join(' ');
 
     var url = 'https://accounts.spotify.com/authorize';
     url += '?response_type=token';
@@ -111,8 +108,8 @@ export function getPlaylistItems(playlist) {
     return axios({
         method: "GET",
         baseURL: "https://api.spotify.com",
-        url: "/v1/users/" + USER_ID + "/playlists/" + playlist + "/tracks",
-        headers: {'Authorization': 'Bearer ' + TOKEN},
+        url: "/v1/users/" + getUserID() + "/playlists/" + playlist + "/tracks",
+        headers: {'Authorization': 'Bearer ' + getToken()},
       })
       .then((response) => {
         return response.data.items.map( Item => {
@@ -124,31 +121,46 @@ export function getPlaylistItems(playlist) {
             };
         });
       })
-      .catch(function(err) {
-          console.log(err);
+      .catch(e => {
+          console.log(e);
       });
 }
 
 // Takes an array with the ids to be deleted
 export function deleteItems(items, playlist) {
-    var itemsArray = items.map( item => {
-        return {
-            "uri": "spotify:track:" + item
-        }
-    });
-
     const tracks = {
-        tracks: itemsArray
+        tracks: items.map( item => {
+            return { "uri": "spotify:track:" + item }
+        })
     }
 
     return axios({
         method: "DELETE",
         baseURL: "https://api.spotify.com",
-        url: "/v1/users/" + USER_ID + "/playlists/" + playlist + "/tracks",
-        headers: {'Authorization': 'Bearer ' + TOKEN},
+        url: "/v1/users/" + getUserID() + "/playlists/" + playlist + "/tracks",
+        headers: {'Authorization': 'Bearer ' + getToken()},
         data: tracks
       })
-      .catch(function(err) {
-          console.log(err);
+      .catch(e => {
+          console.log(e);
+      });
+}
+
+export function addItemsToPlaylist(items, playlist) {
+    const uris = {
+        uris: items.map( item => {
+            return "spotify:track:" + item;
+        })
+    }
+
+    return axios({
+        method: "POST",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/users/" + getUserID() + "/playlists/" + playlist + "/tracks",
+        headers: {'Authorization': 'Bearer ' + getToken()},
+        data: uris
+      })
+      .catch(e => {
+          console.log(e);
       });
 }

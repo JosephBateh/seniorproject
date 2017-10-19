@@ -1,27 +1,54 @@
 import React, {Component} from 'react';
 import {List} from 'material-ui/List';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
-import TextField from 'material-ui/TextField';
-import FlatButton from 'material-ui/FlatButton';
-import ListItem from '../itemlist/ListItem';
+import SearchItem from '../search/SearchItem';
+import Searchbar from '../searchbar/Searchbar';
+import Loading from '../loading/Loading'
+import * as API from '../../helpers/API';
 
 class Search extends Component {
+    state = {
+        playlists: null
+    }
+
+    addToPlaylist = (item, playlist) => {
+        API.addItemsToPlaylist([item], playlist);
+    }
+
+    deleteItems = (value) => {
+        var newItems = this.state.currentPlaylistItems.filter( (item) =>
+            item.ID !== value
+        );
+        
+        API.deleteItems([value], this.state.currentPlaylist)
+        .then((retVal) => {
+            if (retVal.status === 200) {
+                this.setState({
+                    currentPlaylistItems: newItems
+                })
+            }
+        });
+    }
+
+    componentWillMount() {
+        API.getPlaylists().then( (playlists) => {
+            this.setState({
+                playlists: playlists
+            })
+        });
+    }
+
     render() {
         const songs = JSON.parse(sessionStorage.getItem('CurrentListItems'));
-        const searchBarText = sessionStorage.getItem('CurrentSearch');
         
-        return(
+        return this.state.playlists ? (
             <div>
-                <Toolbar>
-                    <ToolbarGroup>
-                        <TextField hintText="Search Spotify..." defaultValue={searchBarText || null}/>
-                        <FlatButton label="Go"/>
-                    </ToolbarGroup>
-                </Toolbar>
+                <Searchbar/>
                 <List>
-                    {songs ? songs.map((song, index) => <ListItem key={index} title={song.Title} artist={song.Artist} album={song.Album} id={song.ID} onClick={this.onClick}></ListItem>) : <ListItem>Loading...</ListItem>}
+                    {songs ? songs.map((song, index) => <SearchItem key={index} title={song.Title} artist={song.Artist} album={song.Album} id={song.ID} playlists={this.state.playlists} addToPlaylist={this.addToPlaylist}></SearchItem>) : <SearchItem>Loading...</SearchItem>}
                 </List>
             </div>
+        ) : (
+            <Loading></Loading>
         );
     }
 }

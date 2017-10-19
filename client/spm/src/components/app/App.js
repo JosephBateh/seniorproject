@@ -18,7 +18,7 @@ class App extends Component {
     }
 
     getUserPlaylists = () => {
-        API.getPlaylists(API.getToken(), API.getUserID()).then((playlists) => {
+        API.getPlaylists().then((playlists) => {
             this.setState({
                 userPlaylists: playlists,
                 currentPlaylist: playlists[0].UUID
@@ -41,7 +41,7 @@ class App extends Component {
     deleteItems = (value) => {
         var newItems = this.state.currentPlaylistItems.filter( (item) =>
             item.ID !== value
-        });
+        );
         
         API.deleteItems([value], this.state.currentPlaylist)
         .then((retVal) => {
