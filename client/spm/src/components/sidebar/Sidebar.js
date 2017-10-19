@@ -4,12 +4,7 @@ import Drawer from 'material-ui/Drawer';
 import {List, ListItem} from 'material-ui/List';
 
 class Sidebar extends Component {    
-    constructor(props) {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(value) {
+    onClick = (value) => {
         this.props.onClick(value);
     }
     

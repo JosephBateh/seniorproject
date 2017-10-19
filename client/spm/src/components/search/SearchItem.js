@@ -4,7 +4,7 @@ import IconButton from 'material-ui/IconButton';
 import MoreIcon from 'material-ui/svg-icons/navigation/more-horiz';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import * as API from '../../helpers/API'
+import SearchItemMenuOption from './SearchItemMenuOption';
 
 class SearchItem extends Component {
     state = {
@@ -15,15 +15,20 @@ class SearchItem extends Component {
         console.log(this.props.id);
     }
 
-    addToPlaylist = (e) => {
-        console.log(e);
-    }
-
-    componentWillMount() {
-        //var playlists = API.getPlaylists();
+    addToPlaylist = (playlist) => {
+        this.props.addToPlaylist(this.props.id, playlist);
     }
 
     render() {
+        const playlists = this.props.playlists;
+        var playlistArray = [];
+
+        for (var index in playlists) {
+            playlistArray.push(
+                <SearchItemMenuOption text={playlists[index].Title} id={playlists[index].UUID} onClick={this.addToPlaylist}/>
+            );
+        }
+
         return (
             <Item 
                 className="playlist-item" 
@@ -41,12 +46,7 @@ class SearchItem extends Component {
                     >
                         <MenuItem
                             primaryText="Add to playlist"
-                            menuItems={[
-                                <MenuItem primaryText="UPPERCASE" />,
-                                <MenuItem primaryText="lowercase" />,
-                                <MenuItem primaryText="CamelCase" />,
-                                <MenuItem primaryText="Propercase" />,
-                            ]}
+                            menuItems={playlistArray}
                         />
                     </IconMenu>
                     

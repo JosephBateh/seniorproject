@@ -1,12 +1,10 @@
 import axios from 'axios';
 
-const REDIRECT_URI = 'http://localhost:3000/callback/';
+const REDIRECT_URI = process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_REDIRECT_URI 
+    : "http://localhost:3000/callback/";
 const USER_TOKEN = 'userToken';
 const USER_ID = 'userID';
-
-if (process.env.NODE_ENV === 'production') {
-    REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-}
 
 export function getToken() {
     return sessionStorage.getItem(USER_TOKEN);
@@ -130,14 +128,10 @@ export function getPlaylistItems(playlist) {
 
 // Takes an array with the ids to be deleted
 export function deleteItems(items, playlist) {
-    var itemsArray = items.map( item => {
-        return {
-            "uri": "spotify:track:" + item
-        }
-    });
-
     const tracks = {
-        tracks: itemsArray
+        tracks: items.map( item => {
+            return { "uri": "spotify:track:" + item }
+        })
     }
 
     return axios({
@@ -146,6 +140,25 @@ export function deleteItems(items, playlist) {
         url: "/v1/users/" + getUserID() + "/playlists/" + playlist + "/tracks",
         headers: {'Authorization': 'Bearer ' + getToken()},
         data: tracks
+      })
+      .catch(e => {
+          console.log(e);
+      });
+}
+
+export function addItemsToPlaylist(items, playlist) {
+    const uris = {
+        uris: items.map( item => {
+            return "spotify:track:" + item;
+        })
+    }
+
+    return axios({
+        method: "POST",
+        baseURL: "https://api.spotify.com",
+        url: "/v1/users/" + getUserID() + "/playlists/" + playlist + "/tracks",
+        headers: {'Authorization': 'Bearer ' + getToken()},
+        data: uris
       })
       .catch(e => {
           console.log(e);

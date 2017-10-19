@@ -2,12 +2,7 @@ import React, {Component} from 'react';
 import {ListItem} from 'material-ui/List';
 
 class SidebarItem extends Component {    
-    constructor(props) {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick() {
+    onClick = () => {
         this.props.onClick(this.props.id);
     }
     
