@@ -4,6 +4,7 @@ import * as API from '../../helpers/API.js';
 
 class Callback extends Component {
     componentWillMount() {
+        sessionStorage.clear();
         var token = window.location.hash.split('=')[1].split('&')[0];
         API.setToken(token);
     }
