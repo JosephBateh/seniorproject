@@ -10,29 +10,21 @@ class App extends Component {
         userPlaylists: null
     }
 
-    getUserInformation = () => {
+    getUser = () => {
         API.getUser(API.getToken())
-        .then( (ID) => {
+        .then((ID) => {
             API.setUserID(ID);
-        })
-        .then( () => {
-            API.getPlaylists().then((playlists) => {
-                this.setState({
-                    userPlaylists: playlists,
-                    currentPlaylist: playlists[0].UUID
-                })
-            });
         });
     }
 
-    // getUserPlaylists = () => {
-    //     API.getPlaylists().then((playlists) => {
-    //         this.setState({
-    //             userPlaylists: playlists,
-    //             currentPlaylist: playlists[0].UUID
-    //         })
-    //     });
-    // }
+    getUserPlaylists = () => {
+        API.getPlaylists().then((playlists) => {
+            this.setState({
+                userPlaylists: playlists,
+                currentPlaylist: playlists[0].UUID
+            })
+        });
+    }
 
     getPlaylistItems = () => {
         API.getPlaylistItems(this.state.currentPlaylist).then((items) => {        
@@ -62,8 +54,8 @@ class App extends Component {
     }
 
     componentWillMount() {
-        this.getUserInformation();
-        //this.getUserPlaylists();
+        this.getUser();
+        this.getUserPlaylists();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
