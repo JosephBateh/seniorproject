@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
+import {withRouter, Route} from 'react-router-dom';
 import Playlist from '../playlist/Playlist';
 import Sidebar from '../sidebar/Sidebar';
 import Search from '../search/Search';
 import Searchbar from '../searchbar/Searchbar';
 import * as API from '../../helpers/API.js';
+
 
 class App extends Component {
     state = {
@@ -11,7 +13,6 @@ class App extends Component {
         listPlaylists: null,
         search: null,
         searchList: null,
-        view: "PLAYLIST"
     }
 
     getPlaylists = () => {
@@ -57,36 +58,21 @@ class App extends Component {
         this.getPlaylists();
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextState !== this.state) {
-            return true;
-        }
-        if (nextProps !== this.props) {
-            return true;
-        }
-        return false;
-    }
-
     componentDidUpdate(nextProps, nextState) {
         if (nextState.playlist !== this.state.playlist) {
             this.getPlaylistItems();
         }
     }
-
-    changeSearchText = (text) => {
-        this.setState({
-            search: text
-        });
-    }
+    
+    // How I would do simple things like this method:
+    changeSearchText = search => this.setState({ search });
 
     search = () => {
         // API call fails if currentSearch is null or empty
         if (this.state.search) {
 
-            // Change view to search view
-            this.setState({
-                view: "SEARCH"
-            });
+            // THIS IS WHAT CHANGES THE URL
+            this.props.history.push('/search');
 
             // Populate search view components
             API.searchSpotify(this.state.search).then((data) => {
@@ -111,22 +97,6 @@ class App extends Component {
     }
 
     render() {
-        var view = (
-            <Playlist
-                items={this.state.playlistItems}
-                deleteItems={this.deleteItems}
-            />
-        );
-
-        if (this.state.view === "SEARCH") {
-            view = (
-                <Search
-                    items={this.state.searchList}
-                />
-            );
-        }
-
-
         return ( 
             <div className="App">
                 <Sidebar
@@ -140,11 +110,19 @@ class App extends Component {
                         onSearch={this.search}
                         text={this.state.search}
                     />
-                    {view}
+                    <Route path="/" render={() =>(
+                        <Playlist
+                            items={this.state.playlistItems}
+                            deleteItems={this.deleteItems}
+                        />)} 
+                    />
+                    <Route path="/search" render={() =>(
+                        <Search items={this.state.searchList}/>} 
+                    />
                 </div>
             </div>
         );
     }
 }
 
-export default App;
+export default withRouter(App);
