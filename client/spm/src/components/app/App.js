@@ -10,13 +10,6 @@ class App extends Component {
         userPlaylists: null
     }
 
-    getUser = () => {
-        API.getUser(API.getToken())
-        .then((ID) => {
-            API.setUserID(ID);
-        });
-    }
-
     getUserPlaylists = () => {
         API.getPlaylists().then((playlists) => {
             this.setState({
@@ -54,7 +47,6 @@ class App extends Component {
     }
 
     componentWillMount() {
-        this.getUser();
         this.getUserPlaylists();
     }
 
