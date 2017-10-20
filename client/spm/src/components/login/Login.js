@@ -3,13 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import * as API from '../../helpers/API.js';
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
-
-        this.authorize = this.authorize.bind(this);
-    }
-    
-    authorize() {
+    authorize = () => {
         API.authorize();
     }
 

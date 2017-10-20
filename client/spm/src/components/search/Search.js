@@ -5,16 +5,12 @@ import Loading from '../loading/Loading'
 import * as API from '../../helpers/API';
 
 class Search extends Component {
-    state = {
-        playlists: null
-    }
-
     addToPlaylist = (item, playlist) => {
         API.addItemsToPlaylist([item], playlist);
     }
 
     render() {
-        const items = this.props.items;
+        const {items, playlists} = this.props;
 
         return this.props.items ? (
             <div>
@@ -26,7 +22,7 @@ class Search extends Component {
                                 artist={item.Artist}
                                 album={item.Album}
                                 id={item.ID}
-                                playlists={this.state.playlists}
+                                playlists={playlists}
                                 addToPlaylist={this.addToPlaylist}/>
                         )) : (
                             <SearchItem>Loading...</SearchItem>

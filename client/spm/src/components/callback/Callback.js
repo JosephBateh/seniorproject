@@ -25,7 +25,7 @@ class Callback extends Component {
 
     render() {
         return this.state.userID ? (
-            <Redirect to="/app"/>
+            <Redirect to="/playlist"/>
         ) : (
             <div>
                 Loading...

@@ -4,6 +4,7 @@ import Sidebar from '../sidebar/Sidebar';
 import Search from '../search/Search';
 import Searchbar from '../searchbar/Searchbar';
 import * as API from '../../helpers/API.js';
+import { withRouter, Route, Redirect } from 'react-router-dom'
 
 class App extends Component {
     state = {
@@ -11,7 +12,6 @@ class App extends Component {
         listPlaylists: null,
         search: null,
         searchList: null,
-        view: "PLAYLIST"
     }
 
     getPlaylists = () => {
@@ -33,8 +33,9 @@ class App extends Component {
     
     handlePlaylistChange = (value) => {
         this.setState({
-            playlist: value,
-            view: "PLAYLIST"
+            playlist: value
+        }, () => {
+            this.props.history.push('/playlist');
         });
     }
 
@@ -54,17 +55,9 @@ class App extends Component {
     }
 
     componentWillMount() {
-        this.getPlaylists();
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextState !== this.state) {
-            return true;
+        if (API.getToken()) {
+            this.getPlaylists();
         }
-        if (nextProps !== this.props) {
-            return true;
-        }
-        return false;
     }
 
     componentDidUpdate(nextProps, nextState) {
@@ -73,20 +66,13 @@ class App extends Component {
         }
     }
 
-    changeSearchText = (text) => {
-        this.setState({
-            search: text
-        });
-    }
+    changeSearchText = search => this.setState({ search });
 
     search = () => {
         // API call fails if currentSearch is null or empty
         if (this.state.search) {
 
-            // Change view to search view
-            this.setState({
-                view: "SEARCH"
-            });
+            this.props.history.push('/search');
 
             // Populate search view components
             API.searchSpotify(this.state.search).then((data) => {
@@ -111,22 +97,15 @@ class App extends Component {
     }
 
     render() {
-        var view = (
-            <Playlist
-                items={this.state.playlistItems}
-                deleteItems={this.deleteItems}
-            />
-        );
-
-        if (this.state.view === "SEARCH") {
-            view = (
-                <Search
-                    items={this.state.searchList}
-                />
-            );
+        if (!API.getToken()) {
+            return <Redirect to="/login"/>
         }
-
-
+        if (this.props.location.pathname === "/") {
+            return <Redirect to="/playlist"/>
+        }
+        if (this.props.location.pathname === "/search" && !this.state.search) {
+            return <Redirect to="/playlist"/>
+        }
         return ( 
             <div className="App">
                 <Sidebar
@@ -140,11 +119,22 @@ class App extends Component {
                         onSearch={this.search}
                         text={this.state.search}
                     />
-                    {view}
+                    <Route path="/playlist" render={() => 
+                        <Playlist
+                            items={this.state.playlistItems}
+                            deleteItems={this.deleteItems}
+                        />
+                    }/>
+                    <Route path="/search" render={() =>
+                        <Search
+                            items={this.state.searchList}
+                            playlists={this.state.listPlaylists}
+                        />
+                    }/>
                 </div>
             </div>
         );
     }
 }
 
-export default App;
+export default withRouter(App);
