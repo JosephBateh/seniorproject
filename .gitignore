@@ -14,10 +14,10 @@
 .glide/
 
 # dependencies
-client/spm/node_modules
+node_modules
 
 # production
-client/spm/build
+build
 
 # misc
 .DS_Store
