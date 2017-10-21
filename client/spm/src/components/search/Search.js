@@ -1,21 +1,22 @@
-import React, {Component} from 'react';
-import {List} from 'material-ui/List';
-import SearchItem from '../search/SearchItem';
-import Loading from '../loading/Loading'
-import * as API from '../../helpers/API';
+import React, { Component } from "react";
+import { List } from "material-ui/List";
+import SearchItem from "../search/SearchItem";
+import Loading from "../loading/Loading";
+import * as API from "../../helpers/API";
 
 class Search extends Component {
     addToPlaylist = (item, playlist) => {
         API.addItemsToPlaylist([item], playlist);
-    }
+    };
 
     render() {
-        const {items, playlists} = this.props;
+        const { items, playlists } = this.props;
 
         return this.props.items ? (
             <div>
                 <List>
-                    {items ? items.map((item, index) => (
+                    {items ? (
+                        items.map((item, index) => (
                             <SearchItem
                                 key={index}
                                 title={item.Title}
@@ -23,14 +24,16 @@ class Search extends Component {
                                 album={item.Album}
                                 id={item.ID}
                                 playlists={playlists}
-                                addToPlaylist={this.addToPlaylist}/>
-                        )) : (
-                            <SearchItem>Loading...</SearchItem>
-                        )}
+                                addToPlaylist={this.addToPlaylist}
+                            />
+                        ))
+                    ) : (
+                        <SearchItem>Loading...</SearchItem>
+                    )}
                 </List>
             </div>
         ) : (
-            <Loading></Loading>
+            <Loading />
         );
     }
 }
