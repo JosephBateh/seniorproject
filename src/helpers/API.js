@@ -8,14 +8,7 @@ const REDIRECT_URI =
 const USER_TOKEN = "userToken";
 const USER_ID = "userID";
 
-if (process.env.TEST == "production") {
-    console.log("IT WORKED");
-} else {
-    console.log("IT DIDNT WORK" + process.env.TEST);
-}
-
-console.log(process.env.NODE_ENV);
-console.log(REDIRECT_URI);
+console.log(process.env.REACT_APP_REDIRECT_URI);
 
 export function getToken() {
     return sessionStorage.getItem(USER_TOKEN);
