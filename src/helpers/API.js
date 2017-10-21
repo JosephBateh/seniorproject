@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const REDIRECT_URI =
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === "production" || process.env.HEROKU_ENV === "production"
         ? process.env.REACT_APP_REDIRECT_URI
         : "http://localhost:3000/callback/";
 const USER_TOKEN = "userToken";
