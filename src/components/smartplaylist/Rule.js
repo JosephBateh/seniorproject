@@ -9,6 +9,13 @@ import Remove from "material-ui/svg-icons/content/remove";
 import Loading from "../loading/Loading";
 
 class Rule extends Component {
+    addRule = () => {
+        this.props.addRule();
+    };
+    deleteRule = () => {
+        this.props.deleteRule();
+    };
+
     render() {
         const playlists = this.props.playlists;
         return playlists ? (
@@ -38,7 +45,7 @@ class Rule extends Component {
                     <ToolbarGroup lastChild={true}>
                         <div>
                             <FlatButton icon={<Remove />} />
-                            <FlatButton icon={<Add />} />
+                            <FlatButton onClick={this.addRule} icon={<Add />} />
                         </div>
                     </ToolbarGroup>
                 </Toolbar>
