@@ -14,7 +14,7 @@ class SmartPlaylist extends Component {
 
     addRule = () => {
         var newRules = this.state.rules;
-        newRules = newRules.push({
+        newRules.push({
             attribute: "playlist",
             is: true,
             value: "Maroon 5"
