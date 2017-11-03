@@ -1,8 +1,20 @@
 import React, { Component } from "react";
+import Rule from "./Rule";
+import Loading from "../loading/Loading";
 
 class SmartPlaylist extends Component {
+	state = {
+		rules: []
+	};
+
 	render() {
-		return <div>HELLO WORLD</div>;
+		return this.state.rules ? (
+			<div style={{ margin: 15 }}>
+				<Rule playlists={this.props.playlists} />
+			</div>
+		) : (
+			<Loading />
+		);
 	}
 }
 

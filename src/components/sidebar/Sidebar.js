@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import SidebarItem from "./SidebarItem";
 import Drawer from "material-ui/Drawer";
 import { List, ListItem } from "material-ui/List";
-import FlatButton from "material-ui/FlatButton";
 import SmartAdd from "material-ui/svg-icons/av/playlist-add";
 import AddButton from "material-ui/svg-icons/content/add-circle-outline";
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation";
