@@ -25,8 +25,8 @@ class SmartPlaylist extends Component {
     };
 
     deleteRule = rule => {
-        console.log(rule);
-        var newRules = this.state.rules.splice(rule, 1);
+        var newRules = this.state.rules;
+        newRules.splice(3, 1);
         this.setState({
             rules: newRules
         });
@@ -39,6 +39,7 @@ class SmartPlaylist extends Component {
                 {rules.map((rule, index) => (
                     <Rule
                         key={index}
+                        index={index}
                         attribute={rule.attribute}
                         is={rule.is}
                         value={rule.value}

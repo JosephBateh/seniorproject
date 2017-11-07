@@ -13,7 +13,7 @@ class Rule extends Component {
         this.props.addRule();
     };
     deleteRule = () => {
-        this.props.deleteRule(this.props.key);
+        this.props.deleteRule(this.props.index);
     };
 
     render() {
