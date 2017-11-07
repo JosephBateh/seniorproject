@@ -25,7 +25,8 @@ class SmartPlaylist extends Component {
     };
 
     deleteRule = rule => {
-        var newRules = this.state.rules.filter();
+        console.log(rule);
+        var newRules = this.state.rules.splice(rule, 1);
         this.setState({
             rules: newRules
         });

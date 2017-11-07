@@ -13,7 +13,7 @@ class Rule extends Component {
         this.props.addRule();
     };
     deleteRule = () => {
-        this.props.deleteRule();
+        this.props.deleteRule(this.props.key);
     };
 
     render() {
@@ -44,7 +44,7 @@ class Rule extends Component {
                     </ToolbarGroup>
                     <ToolbarGroup lastChild={true}>
                         <div>
-                            <FlatButton icon={<Remove />} />
+                            <FlatButton onClick={this.deleteRule} icon={<Remove />} />
                             <FlatButton onClick={this.addRule} icon={<Add />} />
                         </div>
                     </ToolbarGroup>
