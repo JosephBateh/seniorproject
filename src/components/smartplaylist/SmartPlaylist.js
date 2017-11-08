@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import Rule from "./Rule";
+import { Toolbar, ToolbarGroup } from "material-ui/Toolbar";
+import Divider from "material-ui/Divider";
+import FlatButton from "material-ui/FlatButton";
+import Save from "material-ui/svg-icons/content/save";
 
 class SmartPlaylist extends Component {
 	state = {
@@ -12,6 +16,21 @@ class SmartPlaylist extends Component {
 			}
 		]
 	};
+
+	componentDidUpdate() {
+		if (!this.state.rules[0].values) {
+			this.setState({
+				rules: [
+					{
+						attribute: "playlist",
+						matches: [true, false],
+						values: this.props.playlists,
+						state: { match: 0, value: 0 }
+					}
+				]
+			});
+		}
+	}
 
 	addRule = () => {
 		var newRules = this.state.rules;
@@ -60,6 +79,22 @@ class SmartPlaylist extends Component {
 		});
 	};
 
+	save = () => {
+		var rules = [];
+		this.state.rules.map((rule, index) => {
+			var match = rule.matches[rule.state.match];
+			var value = rule.values[rule.state.value];
+			var newRule = {
+				attribute: rule.attribute,
+				match: match,
+				value: value.UUID
+			};
+			rules.push(newRule);
+			return newRule;
+		});
+		console.log(rules);
+	};
+
 	render() {
 		const rules = this.state.rules;
 		return (
@@ -78,6 +113,14 @@ class SmartPlaylist extends Component {
 						changeValue={this.changeValue}
 					/>
 				))}
+				<Divider />
+				<Toolbar style={{ backgroundColor: "white" }}>
+					<ToolbarGroup lastChild={true}>
+						<div>
+							<FlatButton onClick={this.save} icon={<Save />} />
+						</div>
+					</ToolbarGroup>
+				</Toolbar>
 			</div>
 		);
 	}

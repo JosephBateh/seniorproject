@@ -6,7 +6,6 @@ import Divider from "material-ui/Divider";
 import FlatButton from "material-ui/FlatButton";
 import Add from "material-ui/svg-icons/content/add";
 import Remove from "material-ui/svg-icons/content/remove";
-import Save from "material-ui/svg-icons/content/save";
 import Loading from "../loading/Loading";
 
 class Rule extends Component {
@@ -56,14 +55,6 @@ class Rule extends Component {
 						<div>
 							<FlatButton onClick={this.deleteRule} icon={<Remove />} />
 							<FlatButton onClick={this.addRule} icon={<Add />} />
-						</div>
-					</ToolbarGroup>
-				</Toolbar>
-				<Divider />
-				<Toolbar style={{ backgroundColor: "white" }}>
-					<ToolbarGroup lastChild={true}>
-						<div>
-							<FlatButton icon={<Save />} />
 						</div>
 					</ToolbarGroup>
 				</Toolbar>
