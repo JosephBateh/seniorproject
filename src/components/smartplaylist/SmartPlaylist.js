@@ -4,6 +4,7 @@ import { Toolbar, ToolbarGroup } from "material-ui/Toolbar";
 import Divider from "material-ui/Divider";
 import FlatButton from "material-ui/FlatButton";
 import Save from "material-ui/svg-icons/content/save";
+import * as Server from "../../helpers/Server";
 
 class SmartPlaylist extends Component {
 	state = {
@@ -93,6 +94,7 @@ class SmartPlaylist extends Component {
 			return newRule;
 		});
 		console.log(rules);
+		Server.saveSmartPlaylist(rules);
 	};
 
 	render() {

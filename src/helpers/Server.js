@@ -13,3 +13,14 @@ export function serverAuth() {
 			console.log(err);
 		});
 }
+
+export function saveSmartPlaylist(data) {
+	return axios({
+		method: "POST",
+		baseURL: "http://localhost:8080",
+		url: "/smartplaylist",
+		data: data
+	}).catch(err => {
+		console.log(err);
+	});
+}
