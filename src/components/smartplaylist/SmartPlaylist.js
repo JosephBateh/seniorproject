@@ -86,6 +86,7 @@ class SmartPlaylist extends Component {
 			var match = rule.matches[rule.state.match];
 			var value = rule.values[rule.state.value];
 			var newRule = {
+				user: this.props.user,
 				attribute: rule.attribute,
 				match: match,
 				value: value.UUID

@@ -111,6 +111,7 @@ class App extends Component {
 		if (this.props.location.pathname === "/search" && !this.state.search) {
 			return <Redirect to="/playlist" />;
 		}
+		const user = API.getUserID();
 		return (
 			<div className="App">
 				<Sidebar
@@ -145,7 +146,9 @@ class App extends Component {
 					/>
 					<Route
 						path="/smartplaylist"
-						render={() => <SmartPlaylist playlists={this.state.listPlaylists} />}
+						render={() => (
+							<SmartPlaylist user={user} playlists={this.state.listPlaylists} />
+						)}
 					/>
 				</div>
 			</div>
