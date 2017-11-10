@@ -17,7 +17,8 @@ class SmartPlaylist extends Component {
 				state: { match: 0, value: 0 }
 			}
 		],
-		open: false
+		nameEmpty: false,
+		saveSuccess: false
 	};
 
 	componentDidUpdate() {
@@ -86,7 +87,7 @@ class SmartPlaylist extends Component {
 	save = () => {
 		if (!this.state.name) {
 			this.setState({
-				open: true
+				nameEmpty: true
 			});
 			return;
 		}
@@ -107,8 +108,11 @@ class SmartPlaylist extends Component {
 			name: this.state.name,
 			rules: rules
 		};
-		console.log(playlist);
-		Server.saveSmartPlaylist(playlist);
+		Server.saveSmartPlaylist(playlist).then(response => {
+			if (response.status === 200) {
+				this.smartPlaylistSuccess();
+			}
+		});
 	};
 
 	onNameChange = (e, value) => {
@@ -119,7 +123,19 @@ class SmartPlaylist extends Component {
 
 	handleRequestClose = () => {
 		this.setState({
-			open: false
+			nameEmpty: false
+		});
+	};
+
+	smartPlaylistSuccess = () => {
+		this.setState({
+			saveSuccess: true
+		});
+	};
+
+	handleSuccessClose = () => {
+		this.setState({
+			saveSuccess: false
 		});
 	};
 
@@ -155,10 +171,16 @@ class SmartPlaylist extends Component {
 					/>
 				))}
 				<Snackbar
-					open={this.state.open}
+					open={this.state.nameEmpty}
 					message="Please add a name for your playlist"
 					autoHideDuration={3000}
 					onRequestClose={this.handleRequestClose}
+				/>
+				<Snackbar
+					open={this.state.saveSuccess}
+					message="Smart playlist saved successfully"
+					autoHideDuration={3000}
+					onRequestClose={this.handleSuccessClose}
 				/>
 			</div>
 		);
