@@ -3,8 +3,9 @@ import Rule from "./Rule";
 import { Toolbar, ToolbarGroup } from "material-ui/Toolbar";
 import Divider from "material-ui/Divider";
 import FlatButton from "material-ui/FlatButton";
-import Save from "material-ui/svg-icons/content/save";
 import * as Server from "../../helpers/Server";
+import TextField from "material-ui/TextField";
+import Snackbar from "material-ui/Snackbar";
 
 class SmartPlaylist extends Component {
 	state = {
@@ -15,7 +16,8 @@ class SmartPlaylist extends Component {
 				values: this.props.playlists,
 				state: { match: 0, value: 0 }
 			}
-		]
+		],
+		open: false
 	};
 
 	componentDidUpdate() {
@@ -28,7 +30,8 @@ class SmartPlaylist extends Component {
 						values: this.props.playlists,
 						state: { match: 0, value: 0 }
 					}
-				]
+				],
+				name: null
 			});
 		}
 	}
@@ -81,6 +84,12 @@ class SmartPlaylist extends Component {
 	};
 
 	save = () => {
+		if (!this.state.name) {
+			this.setState({
+				open: true
+			});
+			return;
+		}
 		var rules = [];
 		this.state.rules.map((rule, index) => {
 			var match = rule.matches[rule.state.match];
@@ -94,14 +103,43 @@ class SmartPlaylist extends Component {
 			rules.push(newRule);
 			return newRule;
 		});
-		console.log(rules);
-		Server.saveSmartPlaylist(rules);
+		var playlist = {
+			name: this.state.name,
+			rules: rules
+		};
+		console.log(playlist);
+		Server.saveSmartPlaylist(playlist);
+	};
+
+	onNameChange = (e, value) => {
+		this.setState({
+			name: value
+		});
+	};
+
+	handleRequestClose = () => {
+		this.setState({
+			open: false
+		});
 	};
 
 	render() {
 		const rules = this.state.rules;
 		return (
 			<div style={{ margin: 15 }}>
+				<Toolbar style={{ backgroundColor: "white" }}>
+					<ToolbarGroup firstChild={true}>
+						<TextField
+							hintText="Playlist Name..."
+							onChange={this.onNameChange}
+							defaultValue={this.state.name}
+						/>
+					</ToolbarGroup>
+					<ToolbarGroup lastChild={true}>
+						<FlatButton label="Save" onClick={this.save} />
+					</ToolbarGroup>
+				</Toolbar>
+				<Divider />
 				{rules.map((rule, index) => (
 					<Rule
 						key={index}
@@ -116,14 +154,12 @@ class SmartPlaylist extends Component {
 						changeValue={this.changeValue}
 					/>
 				))}
-				<Divider />
-				<Toolbar style={{ backgroundColor: "white" }}>
-					<ToolbarGroup lastChild={true}>
-						<div>
-							<FlatButton onClick={this.save} icon={<Save />} />
-						</div>
-					</ToolbarGroup>
-				</Toolbar>
+				<Snackbar
+					open={this.state.open}
+					message="Please add a name for your playlist"
+					autoHideDuration={3000}
+					onRequestClose={this.handleRequestClose}
+				/>
 			</div>
 		);
 	}
