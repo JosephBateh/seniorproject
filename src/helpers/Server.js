@@ -3,7 +3,7 @@ import axios from "axios";
 export function serverAuth() {
 	return axios({
 		method: "GET",
-		baseURL: "http://localhost:8080",
+		baseURL: process.env.REACT_APP_SERVER_URL,
 		url: "/"
 	})
 		.then(response => {
@@ -17,7 +17,7 @@ export function serverAuth() {
 export function saveSmartPlaylist(data) {
 	return axios({
 		method: "POST",
-		baseURL: "http://localhost:8080",
+		baseURL: process.env.REACT_APP_SERVER_URL,
 		url: "/smartplaylist",
 		data: data
 	}).catch(err => {
