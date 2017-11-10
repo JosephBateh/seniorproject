@@ -96,7 +96,6 @@ class SmartPlaylist extends Component {
 			var match = rule.matches[rule.state.match];
 			var value = rule.values[rule.state.value];
 			var newRule = {
-				user: this.props.user,
 				attribute: rule.attribute,
 				match: match,
 				value: value.UUID
@@ -106,6 +105,7 @@ class SmartPlaylist extends Component {
 		});
 		var playlist = {
 			name: this.state.name,
+			user: this.props.user,
 			rules: rules
 		};
 		Server.saveSmartPlaylist(playlist).then(response => {
