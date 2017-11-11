@@ -163,3 +163,20 @@ export function addItemsToPlaylist(items, playlist) {
 		console.log(e);
 	});
 }
+
+export function createPlaylist(name) {
+	const data = {
+		name: name,
+		public: false
+	};
+
+	return axios({
+		method: "POST",
+		baseURL: "https://api.spotify.com",
+		url: "/v1/users/" + getUserID() + "/playlists",
+		headers: { Authorization: "Bearer " + getToken() },
+		data: data
+	}).catch(e => {
+		console.log(e);
+	});
+}

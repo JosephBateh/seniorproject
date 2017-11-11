@@ -15,12 +15,20 @@ class Sidebar extends Component {
 		this.props.newSmartPlaylist();
 	};
 
+	newNormalPlaylist = () => {
+		this.props.newNormalPlaylist();
+	};
+
 	render() {
 		const playlists = this.props.playlists;
 		return (
 			<Drawer className="sidebar" open={true}>
 				<BottomNavigation>
-					<BottomNavigationItem label="Playlist" icon={<AddButton />} />
+					<BottomNavigationItem
+						label="Playlist"
+						onClick={this.newNormalPlaylist}
+						icon={<AddButton />}
+					/>
 					<BottomNavigationItem
 						label="Smart Playlist"
 						icon={<SmartAdd />}

@@ -6,13 +6,18 @@ import Searchbar from "../searchbar/Searchbar";
 import SmartPlaylist from "../smartplaylist/SmartPlaylist";
 import * as API from "../../helpers/API.js";
 import { withRouter, Route, Redirect } from "react-router-dom";
+import Dialog from "material-ui/Dialog";
+import TextField from "material-ui/TextField";
+import FlatButton from "material-ui/FlatButton";
 
 class App extends Component {
 	state = {
 		playlist: null,
 		listPlaylists: null,
 		search: null,
-		searchList: null
+		searchList: null,
+		createPlaylist: false,
+		errorText: ""
 	};
 
 	getPlaylists = () => {
@@ -101,6 +106,42 @@ class App extends Component {
 		}
 	};
 
+	submitButtonPressed = () => {
+		if (this.state.playlistName) {
+			this.setState({
+				createPlaylist: false,
+				errorText: ""
+			});
+			API.createPlaylist(this.state.playlistName).then(retVal => {
+				if (retVal.status === 200) {
+					this.getPlaylists();
+				}
+			});
+		} else {
+			this.setState({
+				errorText: "Please enter a name"
+			});
+		}
+	};
+
+	handleClose = () => {
+		this.setState({
+			createPlaylist: false
+		});
+	};
+
+	newNormalPlaylist = () => {
+		this.setState({
+			createPlaylist: true
+		});
+	};
+
+	playlistNameChange = (e, value) => {
+		this.setState({
+			playlistName: value
+		});
+	};
+
 	render() {
 		if (!API.getToken()) {
 			return <Redirect to="/login" />;
@@ -112,6 +153,15 @@ class App extends Component {
 			return <Redirect to="/playlist" />;
 		}
 		const user = API.getUserID();
+		const actions = [
+			<FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
+			<FlatButton
+				label="Submit"
+				primary={true}
+				keyboardFocused={true}
+				onClick={this.submitButtonPressed}
+			/>
+		];
 		return (
 			<div className="App">
 				<Sidebar
@@ -119,6 +169,7 @@ class App extends Component {
 					playlists={this.state.listPlaylists}
 					onClick={this.handlePlaylistChange}
 					newSmartPlaylist={this.newSmartPlaylist}
+					newNormalPlaylist={this.newNormalPlaylist}
 				/>
 				<div className="main-content">
 					<Searchbar
@@ -151,6 +202,19 @@ class App extends Component {
 						)}
 					/>
 				</div>
+				<Dialog
+					title="Create Playlist"
+					actions={actions}
+					modal={false}
+					open={this.state.createPlaylist}
+					onRequestClose={this.handleClose}
+				>
+					<TextField
+						errorText={this.state.errorText}
+						onChange={this.playlistNameChange}
+						hintText="Hot New Mixtape"
+					/>
+				</Dialog>
 			</div>
 		);
 	}
