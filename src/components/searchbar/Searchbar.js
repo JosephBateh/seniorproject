@@ -12,6 +12,10 @@ class Searchbar extends Component {
         return this.props.onSearch();
     };
 
+    logoutButtonClicked = () => {
+        return this.props.logout();
+    };
+
     render() {
         return (
             <div className="searchbar">
@@ -23,6 +27,9 @@ class Searchbar extends Component {
                             defaultValue={this.props.text}
                         />
                         <FlatButton label="Search" onClick={this.searchButtonClicked} />
+                    </ToolbarGroup>
+                    <ToolbarGroup lastChild={true}>
+                        <FlatButton label="Logout" onClick={this.logoutButtonClicked} />
                     </ToolbarGroup>
                 </Toolbar>
             </div>
