@@ -112,8 +112,8 @@ export function logout() {
 }
 
 export function expiredToken() {
-    logout();
     alert("Client authorization has expired, please log back in.");
+    logout();
 }
 
 export function getPlaylistItems(playlist) {
@@ -135,7 +135,6 @@ export function getPlaylistItems(playlist) {
         })
         .catch(e => {
             expiredToken();
-            logout();
         });
 }
 
