@@ -7,52 +7,52 @@ import AddButton from "material-ui/svg-icons/content/add-circle-outline";
 import { BottomNavigation, BottomNavigationItem } from "material-ui/BottomNavigation";
 
 class Sidebar extends Component {
-	onClick = value => {
-		this.props.onClick(value);
-	};
+    onClick = value => {
+        this.props.onClick(value);
+    };
 
-	newSmartPlaylist = () => {
-		this.props.newSmartPlaylist();
-	};
+    newSmartPlaylist = () => {
+        this.props.newSmartPlaylist();
+    };
 
-	newNormalPlaylist = () => {
-		this.props.newNormalPlaylist();
-	};
+    newNormalPlaylist = () => {
+        this.props.newNormalPlaylist();
+    };
 
-	render() {
-		const playlists = this.props.playlists;
-		return (
-			<Drawer className="sidebar" open={true}>
-				<BottomNavigation>
-					<BottomNavigationItem
-						label="Playlist"
-						onClick={this.newNormalPlaylist}
-						icon={<AddButton />}
-					/>
-					<BottomNavigationItem
-						label="Smart Playlist"
-						icon={<SmartAdd />}
-						onClick={this.newSmartPlaylist}
-					/>
-				</BottomNavigation>
-				<List className="sidebar-flexlist">
-					{playlists ? (
-						playlists.map((playlist, index) => (
-							<SidebarItem
-								id={playlist.UUID}
-								onClick={this.onClick}
-								key={index}
-								title={playlist.Title}
-								creator={playlist.Creator}
-							/>
-						))
-					) : (
-						<ListItem>loading...</ListItem>
-					)}
-				</List>
-			</Drawer>
-		);
-	}
+    render() {
+        const playlists = this.props.playlists;
+        return (
+            <Drawer className="sidebar" open={true}>
+                <BottomNavigation>
+                    <BottomNavigationItem
+                        label="Playlist"
+                        onClick={this.newNormalPlaylist}
+                        icon={<AddButton />}
+                    />
+                    <BottomNavigationItem
+                        label="Smart Playlist"
+                        icon={<SmartAdd />}
+                        onClick={this.newSmartPlaylist}
+                    />
+                </BottomNavigation>
+                <List className="sidebar-flexlist">
+                    {playlists ? (
+                        playlists.map((playlist, index) => (
+                            <SidebarItem
+                                id={playlist.UUID}
+                                onClick={this.onClick}
+                                key={index}
+                                title={playlist.Title}
+                                creator={playlist.Creator}
+                            />
+                        ))
+                    ) : (
+                        <ListItem>loading...</ListItem>
+                    )}
+                </List>
+            </Drawer>
+        );
+    }
 }
 
 export default Sidebar;
