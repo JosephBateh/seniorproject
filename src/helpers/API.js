@@ -35,7 +35,7 @@ export function getUser(token) {
             return response.data.id;
         })
         .catch(err => {
-            console.log(err);
+            expiredToken();
         });
 }
 
@@ -58,7 +58,7 @@ export function getPlaylists() {
             });
         })
         .catch(function(err) {
-            console.log(err);
+            expiredToken();
         });
 }
 
@@ -73,7 +73,7 @@ export function searchSpotify(query) {
             type: "track,artist,album"
         }
     }).catch(e => {
-        console.log(e);
+        expiredToken();
     });
 }
 
@@ -111,6 +111,11 @@ export function logout() {
     window.location = process.env.REACT_APP_BASE_URL + "login";
 }
 
+export function expiredToken() {
+    logout();
+    alert("Client authorization has expired, please log back in.");
+}
+
 export function getPlaylistItems(playlist) {
     return axios({
         method: "GET",
@@ -129,7 +134,8 @@ export function getPlaylistItems(playlist) {
             });
         })
         .catch(e => {
-            console.log(e);
+            expiredToken();
+            logout();
         });
 }
 
@@ -148,7 +154,7 @@ export function deleteItems(items, playlist) {
         headers: { Authorization: "Bearer " + getToken() },
         data: tracks
     }).catch(e => {
-        console.log(e);
+        expiredToken();
     });
 }
 
@@ -166,7 +172,7 @@ export function addItemsToPlaylist(items, playlist) {
         headers: { Authorization: "Bearer " + getToken() },
         data: uris
     }).catch(e => {
-        console.log(e);
+        expiredToken();
     });
 }
 
@@ -183,6 +189,6 @@ export function createPlaylist(name) {
         headers: { Authorization: "Bearer " + getToken() },
         data: data
     }).catch(e => {
-        console.log(e);
+        expiredToken();
     });
 }
