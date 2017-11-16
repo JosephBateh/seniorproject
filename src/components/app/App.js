@@ -17,14 +17,24 @@ class App extends Component {
         search: null,
         searchList: null,
         createPlaylist: false,
-        errorText: ""
+        errorText: "",
+        noPlaylists: false
     };
 
     getPlaylists = () => {
         API.getPlaylists().then(playlists => {
+            var initialPlaylist = playlists[0];
+            var createPlaylist = false;
+            if (initialPlaylist) {
+                initialPlaylist = playlists[0].UUID;
+            } else {
+                initialPlaylist = null;
+                createPlaylist = true;
+            }
             this.setState({
                 listPlaylists: playlists,
-                playlist: playlists[0].UUID
+                playlist: initialPlaylist,
+                noPlaylists: createPlaylist
             });
         });
     };
@@ -74,6 +84,12 @@ class App extends Component {
         if (nextState.playlist !== this.state.playlist) {
             this.getPlaylistItems();
         }
+        if (
+            nextState.createPlaylist !== this.state.createPlaylist ||
+            nextState.noPlaylists !== this.state.noPlaylists
+        ) {
+            this.getPlaylists();
+        }
     }
 
     changeSearchText = search => this.setState({ search });
@@ -110,6 +126,7 @@ class App extends Component {
         if (this.state.playlistName) {
             this.setState({
                 createPlaylist: false,
+                noPlaylists: false,
                 errorText: ""
             });
             API.createPlaylist(this.state.playlistName).then(retVal => {
@@ -166,6 +183,14 @@ class App extends Component {
                 onClick={this.submitButtonPressed}
             />
         ];
+        const onlySubmit = [
+            <FlatButton
+                label="Submit"
+                primary={true}
+                keyboardFocused={true}
+                onClick={this.submitButtonPressed}
+            />
+        ];
         return (
             <div className="App">
                 <Sidebar
@@ -184,12 +209,15 @@ class App extends Component {
                     />
                     <Route
                         path="/playlist"
-                        render={() => (
-                            <Playlist
-                                items={this.state.playlistItems}
-                                deleteItems={this.deleteItems}
-                            />
-                        )}
+                        render={() =>
+                            this.state.playlist ? (
+                                <Playlist
+                                    items={this.state.playlistItems}
+                                    deleteItems={this.deleteItems}
+                                />
+                            ) : (
+                                <div>Loading</div>
+                            )}
                     />
                     <Route
                         path="/search"
@@ -212,6 +240,19 @@ class App extends Component {
                     actions={actions}
                     modal={false}
                     open={this.state.createPlaylist}
+                    onRequestClose={this.handleClose}
+                >
+                    <TextField
+                        errorText={this.state.errorText}
+                        onChange={this.playlistNameChange}
+                        hintText="Hot New Mixtape"
+                    />
+                </Dialog>
+                <Dialog
+                    title="Please Create a Playlist"
+                    actions={onlySubmit}
+                    modal={false}
+                    open={this.state.noPlaylists}
                     onRequestClose={this.handleClose}
                 >
                     <TextField
