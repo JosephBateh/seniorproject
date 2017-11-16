@@ -57,9 +57,18 @@ class SmartPlaylist extends Component {
     changeMatch = (rule, value) => {
         var rules = this.state.rules;
         var newRule = rules[rule];
-        var newState = newRule.state;
-        newState.match = value;
-        newRule.state = newState;
+        newRule.match = value;
+        rules.splice(rule, 1, newRule);
+        this.setState({
+            rules: rules
+        });
+        console.log(rules);
+    };
+
+    changeAttribute = (rule, value) => {
+        var rules = this.state.rules;
+        var newRule = rules[rule];
+        newRule.attribute = value;
         rules.splice(rule, 1, newRule);
         this.setState({
             rules: rules
@@ -86,10 +95,11 @@ class SmartPlaylist extends Component {
         }
         var rules = [];
         this.state.rules.map((rule, index) => {
-            var match = rule.matchList[rule.state.match];
-            var value = rule.values[rule.state.value];
+            var attribute = this.state.attributeList[rule.attribute];
+            var match = this.state.matchList[rule.match];
+            var value = this.props.playlists[rule.value];
             var newRule = {
-                attribute: rule.attribute,
+                attribute: attribute,
                 match: match,
                 value: value.UUID
             };
@@ -101,7 +111,6 @@ class SmartPlaylist extends Component {
             user: this.props.user,
             rules: rules
         };
-        console.log(playlist);
         Server.saveSmartPlaylist(playlist).then(response => {
             if (response && response.status === 200) {
                 this.smartPlaylistSuccess();
@@ -166,6 +175,7 @@ class SmartPlaylist extends Component {
                         deleteRule={this.deleteRule}
                         changeMatch={this.changeMatch}
                         changeValue={this.changeValue}
+                        changeAttribute={this.changeAttribute}
                     />
                 ))}
                 <Snackbar

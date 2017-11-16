@@ -25,6 +25,10 @@ class Rule extends Component {
         this.props.changeValue(this.props.index, key);
     };
 
+    changeAttribute = (event, key, value) => {
+        this.props.changeAttribute(this.props.index, key);
+    };
+
     render() {
         const playlists = this.props.playlists;
         return playlists ? (
@@ -32,7 +36,7 @@ class Rule extends Component {
                 <Divider />
                 <Toolbar style={{ backgroundColor: "white" }}>
                     <ToolbarGroup firstChild={true}>
-                        <DropDownMenu value={0}>
+                        <DropDownMenu value={this.props.attribute} onChange={this.changeAttribute}>
                             {this.props.attributeList.map((attribute, index) => {
                                 return (
                                     <MenuItem key={index} value={index} primaryText={attribute} />
