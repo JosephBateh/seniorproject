@@ -8,183 +8,196 @@ import TextField from "material-ui/TextField";
 import Snackbar from "material-ui/Snackbar";
 
 class SmartPlaylist extends Component {
-	state = {
-		rules: [
-			{
-				attribute: "playlist",
-				matches: [true, false],
-				values: this.props.playlists,
-				state: { match: 0, value: 0 }
-			}
-		],
-		nameEmpty: false,
-		saveSuccess: false
-	};
+    state = {
+        rules: [
+            {
+                attribute: 0,
+                match: 0,
+                value: 0,
+                valueList: this.props.playlists
+            }
+        ],
+        nameEmpty: false,
+        saveSuccess: false,
+        attributeList: ["playlist", "plays"],
+        matchList: ["is", "is not", "greater", "less"]
+    };
 
-	componentDidUpdate() {
-		if (!this.state.rules[0].values) {
-			this.setState({
-				rules: [
-					{
-						attribute: "playlist",
-						matches: [true, false],
-						values: this.props.playlists,
-						state: { match: 0, value: 0 }
-					}
-				],
-				name: null
-			});
-		}
-	}
+    componentDidMount() {
+        Server.getRuleAttributes().then(attributes => {
+            this.setState({
+                attributeList: attributes
+            });
+        });
+    }
 
-	addRule = () => {
-		var newRules = this.state.rules;
-		newRules.push({
-			attribute: "playlist",
-			matches: [true, false],
-			values: this.props.playlists,
-			state: { match: 0, value: 0 }
-		});
-		this.setState({
-			rules: newRules
-		});
-	};
+    addRule = () => {
+        var newRules = this.state.rules;
+        newRules.push({
+            attribute: 0,
+            match: 0,
+            value: 0,
+            valueList: this.props.playlists
+        });
+        this.setState({
+            rules: newRules
+        });
+    };
 
-	deleteRule = rule => {
-		var newRules = this.state.rules;
-		if (newRules.length > 1) {
-			newRules.splice(rule, 1);
-		}
-		this.setState({
-			rules: newRules
-		});
-	};
+    deleteRule = rule => {
+        var newRules = this.state.rules;
+        if (newRules.length > 1) {
+            newRules.splice(rule, 1);
+        }
+        this.setState({
+            rules: newRules
+        });
+    };
 
-	changeMatch = (rule, value) => {
-		var rules = this.state.rules;
-		var newRule = rules[rule];
-		var newState = newRule.state;
-		newState.match = value;
-		newRule.state = newState;
-		rules.splice(rule, 1, newRule);
-		this.setState({
-			rules: rules
-		});
-	};
+    changeMatch = (rule, value) => {
+        var rules = this.state.rules;
+        var newRule = rules[rule];
+        newRule.match = value;
+        rules.splice(rule, 1, newRule);
+        this.setState({
+            rules: rules
+        });
+    };
 
-	changeValue = (rule, value) => {
-		var rules = this.state.rules;
-		var newRule = rules[rule];
-		var newState = newRule.state;
-		newState.value = value;
-		newRule.state = newState;
-		rules.splice(rule, 1, newRule);
-		this.setState({
-			rules: rules
-		});
-	};
+    changeAttribute = (rule, value) => {
+        var rules = this.state.rules;
+        var newRule = rules[rule];
+        newRule.attribute = value;
+        rules.splice(rule, 1, newRule);
+        this.setState({
+            rules: rules
+        });
+    };
 
-	save = () => {
-		if (!this.state.name) {
-			this.setState({
-				nameEmpty: true
-			});
-			return;
-		}
-		var rules = [];
-		this.state.rules.map((rule, index) => {
-			var match = rule.matches[rule.state.match];
-			var value = rule.values[rule.state.value];
-			var newRule = {
-				attribute: rule.attribute,
-				match: match,
-				value: value.UUID
-			};
-			rules.push(newRule);
-			return newRule;
-		});
-		var playlist = {
-			name: this.state.name,
-			user: this.props.user,
-			rules: rules
-		};
-		Server.saveSmartPlaylist(playlist).then(response => {
-			if (response.status === 200) {
-				this.smartPlaylistSuccess();
-			}
-		});
-	};
+    changeValue = (rule, value) => {
+        var rules = this.state.rules;
+        var newRule = rules[rule];
+        newRule.value = value;
+        rules.splice(rule, 1, newRule);
+        this.setState({
+            rules: rules
+        });
+    };
 
-	onNameChange = (e, value) => {
-		this.setState({
-			name: value
-		});
-	};
+    save = () => {
+        if (!this.state.name) {
+            this.setState({
+                nameEmpty: true
+            });
+            return;
+        }
+        var rules = [];
+        this.state.rules.map((rule, index) => {
+            var attribute = this.state.attributeList[rule.attribute];
+            var match = this.state.matchList[rule.match];
 
-	handleRequestClose = () => {
-		this.setState({
-			nameEmpty: false
-		});
-	};
+            var value;
+            if (attribute === "plays") {
+                value = rule.value;
+            } else {
+                value = this.props.playlists[rule.value].UUID;
+            }
 
-	smartPlaylistSuccess = () => {
-		this.setState({
-			saveSuccess: true
-		});
-	};
+            var newRule = {
+                attribute: attribute,
+                match: match,
+                value: value
+            };
+            rules.push(newRule);
+            return newRule;
+        });
+        var playlist = {
+            name: this.state.name,
+            user: this.props.user,
+            rules: rules
+        };
+        Server.saveSmartPlaylist(playlist).then(response => {
+            if (response && response.status === 200) {
+                this.smartPlaylistSuccess();
+            } else {
+                console.log(response);
+            }
+        });
+    };
 
-	handleSuccessClose = () => {
-		this.setState({
-			saveSuccess: false
-		});
-	};
+    onNameChange = (e, value) => {
+        this.setState({
+            name: value
+        });
+    };
 
-	render() {
-		const rules = this.state.rules;
-		return (
-			<div style={{ margin: 15 }}>
-				<Toolbar style={{ backgroundColor: "white" }}>
-					<ToolbarGroup firstChild={true}>
-						<TextField
-							hintText="Playlist Name..."
-							onChange={this.onNameChange}
-							defaultValue={this.state.name}
-						/>
-					</ToolbarGroup>
-					<ToolbarGroup lastChild={true}>
-						<FlatButton label="Save" onClick={this.save} />
-					</ToolbarGroup>
-				</Toolbar>
-				<Divider />
-				{rules.map((rule, index) => (
-					<Rule
-						key={index}
-						index={index}
-						attribute={rule.attribute}
-						match={rule.state.match}
-						value={rule.state.value}
-						playlists={this.props.playlists}
-						addRule={this.addRule}
-						deleteRule={this.deleteRule}
-						changeMatch={this.changeMatch}
-						changeValue={this.changeValue}
-					/>
-				))}
-				<Snackbar
-					open={this.state.nameEmpty}
-					message="Please add a name for your playlist"
-					autoHideDuration={3000}
-					onRequestClose={this.handleRequestClose}
-				/>
-				<Snackbar
-					open={this.state.saveSuccess}
-					message="Smart playlist saved successfully"
-					autoHideDuration={3000}
-					onRequestClose={this.handleSuccessClose}
-				/>
-			</div>
-		);
-	}
+    handleRequestClose = () => {
+        this.setState({
+            nameEmpty: false
+        });
+    };
+
+    smartPlaylistSuccess = () => {
+        this.setState({
+            saveSuccess: true
+        });
+    };
+
+    handleSuccessClose = () => {
+        this.setState({
+            saveSuccess: false
+        });
+    };
+
+    render() {
+        const rules = this.state.rules;
+        return (
+            <div style={{ margin: 15 }}>
+                <Toolbar style={{ backgroundColor: "white" }}>
+                    <ToolbarGroup firstChild={true}>
+                        <TextField
+                            hintText="Playlist Name..."
+                            onChange={this.onNameChange}
+                            defaultValue={this.state.name}
+                        />
+                    </ToolbarGroup>
+                    <ToolbarGroup lastChild={true}>
+                        <FlatButton label="Save" onClick={this.save} />
+                    </ToolbarGroup>
+                </Toolbar>
+                <Divider />
+                {rules.map((rule, index) => (
+                    <Rule
+                        key={index}
+                        index={index}
+                        attribute={rule.attribute}
+                        attributeList={this.state.attributeList}
+                        match={rule.match}
+                        matchList={this.state.matchList}
+                        value={rule.value}
+                        playlists={this.props.playlists}
+                        addRule={this.addRule}
+                        deleteRule={this.deleteRule}
+                        changeMatch={this.changeMatch}
+                        changeValue={this.changeValue}
+                        changeAttribute={this.changeAttribute}
+                    />
+                ))}
+                <Snackbar
+                    open={this.state.nameEmpty}
+                    message="Please add a name for your playlist"
+                    autoHideDuration={3000}
+                    onRequestClose={this.handleRequestClose}
+                />
+                <Snackbar
+                    open={this.state.saveSuccess}
+                    message="Smart playlist saved successfully"
+                    autoHideDuration={3000}
+                    onRequestClose={this.handleSuccessClose}
+                />
+            </div>
+        );
+    }
 }
 
 export default SmartPlaylist;
