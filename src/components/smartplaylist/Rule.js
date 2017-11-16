@@ -64,7 +64,7 @@ class Rule extends Component {
                                 })}
                             </DropDownMenu>
                         )}
-                        {this.props.attributeList[this.props.attribute] === "plays" ? (
+                        {this.props.attributeList[this.props.attribute] !== "playlist" ? (
                             <TextField id="text_field" onChange={this.changeValue} />
                         ) : (
                             <DropDownMenu value={this.props.value} onChange={this.changeValue}>
