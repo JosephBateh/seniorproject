@@ -62,7 +62,6 @@ class SmartPlaylist extends Component {
         this.setState({
             rules: rules
         });
-        console.log(rules);
     };
 
     changeAttribute = (rule, value) => {
@@ -73,7 +72,6 @@ class SmartPlaylist extends Component {
         this.setState({
             rules: rules
         });
-        console.log(rules);
     };
 
     changeValue = (rule, value) => {
@@ -97,11 +95,18 @@ class SmartPlaylist extends Component {
         this.state.rules.map((rule, index) => {
             var attribute = this.state.attributeList[rule.attribute];
             var match = this.state.matchList[rule.match];
-            var value = this.props.playlists[rule.value];
+
+            var value;
+            if (attribute === "plays") {
+                value = rule.value;
+            } else {
+                value = this.props.playlists[rule.value].UUID;
+            }
+
             var newRule = {
                 attribute: attribute,
                 match: match,
-                value: value.UUID
+                value: value
             };
             rules.push(newRule);
             return newRule;

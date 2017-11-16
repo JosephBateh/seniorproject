@@ -7,6 +7,7 @@ import FlatButton from "material-ui/FlatButton";
 import Add from "material-ui/svg-icons/content/add";
 import Remove from "material-ui/svg-icons/content/remove";
 import Loading from "../loading/Loading";
+import TextField from "material-ui/TextField";
 
 class Rule extends Component {
     addRule = () => {
@@ -31,6 +32,9 @@ class Rule extends Component {
 
     render() {
         const playlists = this.props.playlists;
+        const matchList = this.props.matchList;
+        var nonPlayMatchlist = [];
+        nonPlayMatchlist.push(matchList[0], matchList[1]);
         return playlists ? (
             <div>
                 <Divider />
@@ -43,22 +47,38 @@ class Rule extends Component {
                                 );
                             })}
                         </DropDownMenu>
-                        <DropDownMenu value={this.props.match} onChange={this.changeMatch}>
-                            {this.props.matchList.map((match, index) => {
-                                return <MenuItem key={index} value={index} primaryText={match} />;
-                            })}
-                        </DropDownMenu>
-                        <DropDownMenu value={this.props.value} onChange={this.changeValue}>
-                            {playlists.map((playlist, index) => {
-                                return (
-                                    <MenuItem
-                                        key={index}
-                                        value={index}
-                                        primaryText={playlist.Title}
-                                    />
-                                );
-                            })}
-                        </DropDownMenu>
+                        {this.props.attributeList[this.props.attribute] === "plays" ? (
+                            <DropDownMenu value={this.props.match} onChange={this.changeMatch}>
+                                {this.props.matchList.map((match, index) => {
+                                    return (
+                                        <MenuItem key={index} value={index} primaryText={match} />
+                                    );
+                                })}
+                            </DropDownMenu>
+                        ) : (
+                            <DropDownMenu value={this.props.match} onChange={this.changeMatch}>
+                                {nonPlayMatchlist.map((match, index) => {
+                                    return (
+                                        <MenuItem key={index} value={index} primaryText={match} />
+                                    );
+                                })}
+                            </DropDownMenu>
+                        )}
+                        {this.props.attributeList[this.props.attribute] === "plays" ? (
+                            <TextField id="text_field" onChange={this.changeValue} />
+                        ) : (
+                            <DropDownMenu value={this.props.value} onChange={this.changeValue}>
+                                {playlists.map((playlist, index) => {
+                                    return (
+                                        <MenuItem
+                                            key={index}
+                                            value={index}
+                                            primaryText={playlist.Title}
+                                        />
+                                    );
+                                })}
+                            </DropDownMenu>
+                        )}
                     </ToolbarGroup>
                     <ToolbarGroup lastChild={true}>
                         <div>
