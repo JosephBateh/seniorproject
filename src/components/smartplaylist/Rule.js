@@ -33,7 +33,11 @@ class Rule extends Component {
                 <Toolbar style={{ backgroundColor: "white" }}>
                     <ToolbarGroup firstChild={true}>
                         <DropDownMenu value={0}>
-                            <MenuItem value={0} primaryText="Playlist" />
+                            {this.props.attributeList.map((attribute, index) => {
+                                return (
+                                    <MenuItem key={index} value={index} primaryText={attribute} />
+                                );
+                            })}
                         </DropDownMenu>
                         <DropDownMenu value={this.props.match} onChange={this.changeMatch}>
                             {this.props.matchList.map((match, index) => {

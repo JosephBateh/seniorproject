@@ -11,39 +11,33 @@ class SmartPlaylist extends Component {
     state = {
         rules: [
             {
-                attribute: "playlist",
-                matchList: ["is", "is not"],
-                values: this.props.playlists,
-                state: { match: 0, value: 0 }
+                attribute: 0,
+                match: 0,
+                value: 0,
+                valueList: this.props.playlists
             }
         ],
         nameEmpty: false,
-        saveSuccess: false
+        saveSuccess: false,
+        attributeList: ["playlist", "plays"],
+        matchList: ["is", "is not", "greater", "less"]
     };
 
-    componentDidUpdate() {
-        if (!this.state.rules[0].values) {
+    componentDidMount() {
+        Server.getRuleAttributes().then(attributes => {
             this.setState({
-                rules: [
-                    {
-                        attribute: "playlist",
-                        matchList: ["is", "is not"],
-                        values: this.props.playlists,
-                        state: { match: 0, value: 0 }
-                    }
-                ],
-                name: null
+                attributeList: attributes
             });
-        }
+        });
     }
 
     addRule = () => {
         var newRules = this.state.rules;
         newRules.push({
-            attribute: "playlist",
-            matchList: ["is", "is not"],
-            values: this.props.playlists,
-            state: { match: 0, value: 0 }
+            attribute: 0,
+            match: 0,
+            value: 0,
+            valueList: this.props.playlists
         });
         this.setState({
             rules: newRules
@@ -76,9 +70,7 @@ class SmartPlaylist extends Component {
     changeValue = (rule, value) => {
         var rules = this.state.rules;
         var newRule = rules[rule];
-        var newState = newRule.state;
-        newState.value = value;
-        newRule.state = newState;
+        newRule.value = value;
         rules.splice(rule, 1, newRule);
         this.setState({
             rules: rules
@@ -165,9 +157,10 @@ class SmartPlaylist extends Component {
                         key={index}
                         index={index}
                         attribute={rule.attribute}
-                        match={rule.state.match}
-                        matchList={rule.matchList}
-                        value={rule.state.value}
+                        attributeList={this.state.attributeList}
+                        match={rule.match}
+                        matchList={this.state.matchList}
+                        value={rule.value}
                         playlists={this.props.playlists}
                         addRule={this.addRule}
                         deleteRule={this.deleteRule}
